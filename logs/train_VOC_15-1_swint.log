@@ -1,0 +1,37 @@
+nohup: ignoring input
+===================Initalize Training===========================
+IL Task : 15-1
+Step : 0
+ Device: cuda
+opts :  Namespace(KD_loss_type='KLDiv_loss', KD_outlogits=False, amp=True, batch_size=6, bn_freeze=True, ckpt=None, contrastive_learning=False, crop_size=448, crop_val=False, curr_itrs=0, curr_step=0, cutmix=False, cutout=False, data_ratio=1.0, data_root='/home/yb/dataset/VOC/PascalVOC12/VOCdevkit/VOC2012', dataset='voc', enable_vis=False, feature_decoupling=False, freeze=True, gpu_id='1', lamb=1.0, loss_type='bce_loss', lr=0.01, lr_policy='poly', mem_size=0, mixup=False, model='deeplabv3_microsoft_swintransformer_swin_t', num_classes=[1, 1, 15], output_stride=16, overlap=True, print_interval=10, prototype_matching=False, pseudo=True, pseudo_thresh=0.7, random_seed=1, separable_conv=False, step_size=10000, task='15-1', test_only=False, train_epoch=30, uncertainty_pseudo=True, unknown=True, use_KD_class_weight=False, use_KD_layer_weight=True, val_batch_size=1, val_interval=200, vis_env='main', vis_num_samples=8, vis_port='28333', w_transfer=True, weight_decay=0.0001)
+==============================================
+----------- trainable parameters --------------
+-----------------------------------------------
+!!! Model missing, start retraining
+>>>9568 files for train:
+>>>1240 files for val:
+Dataset: voc, Train-set: 9568, Val-set: 1240, Test-set: 1449
+Train epoch : 30 , iterations : 47820 , val_interval : 478
+Model saved as checkpoints/deeplabv3_microsoft_swintransformer_swin_t_voc_15-1_step_0_overlap.pth
+/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/_reduction.py:44: UserWarning: size_average and reduce args will be deprecated, please use reduction='mean' instead.
+  warnings.warn(warning.format(ret))
+Traceback (most recent call last):
+  File "train_swin.py", line 778, in <module>
+    main(opts)
+  File "train_swin.py", line 596, in main
+    ret_features, outputs = model(images) # outputs: torch.Size([12,17,513,513])
+  File "/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/parallel/data_parallel.py", line 159, in forward
+    return self.module(*inputs[0], **kwargs[0])
+  File "/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/yb/code/semantic/CISSLD/network/utils.py", line 17, in forward
+    ret_features, x = self.classifier(features)                 # classifier is the DeepLabHead
+  File "/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/home/yb/code/semantic/CISSLD/network/_deeplab.py", line 133, in forward
+    feature = self.head_swint(feature['out'])
+  File "/home/yb/anaconda3/lib/python3.8/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+TypeError: forward() takes 1 positional argument but 2 were given

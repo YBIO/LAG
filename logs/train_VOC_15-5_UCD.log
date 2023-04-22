@@ -1,0 +1,183 @@
+nohup: ignoring input
+===================Train Info===========================
+  task : 15-5
+  step : 1
+  Device: cuda
+  opts :  Namespace(KD_loss_type='KD_loss', KD_outlogits=False, amp=True, batch_size=12, bn_freeze=True, ckpt=None, contrastive_learning=False, crop_size=513, crop_val=False, curr_itrs=0, curr_step=1, cutmix=False, cutout=False, data_ratio=0.5, data_root='/home/yb/dataset/VOC/PascalVOC12/VOCdevkit/VOC2012', dataset='voc', feature_decoupling=True, freeze=True, gpu_id='2,3', lamb=1.0, loss_type='bce_loss', lr=0.01, lr_policy='poly', mem_size=0, mixup=False, model='deeplabv3_resnet101', num_classes=[1, 1, 15, 5], output_stride=16, overlap=True, print_interval=10, prototype_matching=False, pseudo=True, pseudo_thresh=0.7, random_seed=1, separable_conv=False, step_size=10000, task='15-5', test_only=False, train_epoch=5, unknown=True, use_KD_class_weight=False, use_KD_layer_weight=True, val_batch_size=4, val_interval=200, w_transfer=True, weight_decay=0.0001)
+==============================================
+... weight transfer
+Model restored from checkpoints/deeplabv3_resnet101_voc_15-5_step_0_overlap.pth
+>>>num_all_file for step-train training: 2145
+>>>num_LD_file for step-train training: 1072
+>>>num_file for val: 354
+Dataset: voc, Train set: 1072, Val set: 354, Test set: 1449
+... train epoch : 5 , iterations : 445 , val_interval : 100
+Model saved as checkpoints/deeplabv3_resnet101_voc_15-5_step_1_overlap.pth
+[15-5 / step 1] Epoch 1, Itrs 50/445, Loss=1.186193, CL_loss=0.000000, KD_loss_ret=0.069989, Time=1251.95 , LR=0.00898283
+[15-5 / step 1] Epoch 2, Itrs 100/445, Loss=0.837778, CL_loss=0.000000, KD_loss_ret=0.070041, Time=923.12 , LR=0.00795267
+validation...
+
+Overall Acc: 0.800158
+Mean Acc: 0.149757
+FreqW Acc: 0.726146
+Mean IoU: 0.129744
+Class IoU/Acc:
+\background: 0.8005 (miou) , 0.8745 (acc) 
+\aeroplane: 0.0000 (miou) , 0.0000 (acc) 
+\bicycle: 0.0000 (miou) , 0.0000 (acc) 
+\bird: 0.0000 (miou) , 0.0000 (acc) 
+\boat: 0.0000 (miou) , 0.0000 (acc) 
+\bottle: 0.0000 (miou) , 0.0000 (acc) 
+\bus: 0.0000 (miou) , 0.0000 (acc) 
+\car: 0.0000 (miou) , 0.0000 (acc) 
+\cat: 0.0000 (miou) , 0.0000 (acc) 
+\chair: 0.0000 (miou) , 0.0000 (acc) 
+\cow: 0.0000 (miou) , 0.0000 (acc) 
+\diningtable: 0.0000 (miou) , 0.0000 (acc) 
+\dog: 0.0000 (miou) , 0.0000 (acc) 
+\horse: 0.0000 (miou) , 0.0000 (acc) 
+\motorbike: 0.0000 (miou) , 0.0000 (acc) 
+\person: 0.0000 (miou) , 0.0000 (acc) 
+\pottedplant: 0.0340 (miou) , 0.0340 (acc) 
+\sheep: 0.4195 (miou) , 0.4235 (acc) 
+\sofa: 0.2394 (miou) , 0.2730 (acc) 
+\train: 0.7091 (miou) , 0.8219 (acc) 
+\tvmonitor: 0.5221 (miou) , 0.7180 (acc) 
+
+curr_val_score : 0.3848
+... save best ckpt :  0.38483115722057176
+Model saved as checkpoints/deeplabv3_resnet101_voc_15-5_step_1_overlap.pth
+[15-5 / step 1] Epoch 2, Itrs 150/445, Loss=0.831557, CL_loss=0.000000, KD_loss_ret=0.069960, Time=940.43 , LR=0.00690742
+[15-5 / step 1] Epoch 3, Itrs 200/445, Loss=0.782631, CL_loss=0.000000, KD_loss_ret=0.070017, Time=913.88 , LR=0.00584421
+validation...
+
+Overall Acc: 0.825846
+Mean Acc: 0.186741
+FreqW Acc: 0.761453
+Mean IoU: 0.165719
+Class IoU/Acc:
+\background: 0.8131 (miou) , 0.8725 (acc) 
+\aeroplane: 0.0000 (miou) , 0.0000 (acc) 
+\bicycle: 0.0000 (miou) , 0.0000 (acc) 
+\bird: 0.0000 (miou) , 0.0000 (acc) 
+\boat: 0.0000 (miou) , 0.0000 (acc) 
+\bottle: 0.0000 (miou) , 0.0000 (acc) 
+\bus: 0.0000 (miou) , 0.0000 (acc) 
+\car: 0.0000 (miou) , 0.0000 (acc) 
+\cat: 0.0000 (miou) , 0.0000 (acc) 
+\chair: 0.0000 (miou) , 0.0000 (acc) 
+\cow: 0.0000 (miou) , 0.0000 (acc) 
+\diningtable: 0.0000 (miou) , 0.0000 (acc) 
+\dog: 0.0000 (miou) , 0.0000 (acc) 
+\horse: 0.0000 (miou) , 0.0000 (acc) 
+\motorbike: 0.0000 (miou) , 0.0000 (acc) 
+\person: 0.0000 (miou) , 0.0000 (acc) 
+\pottedplant: 0.2990 (miou) , 0.3333 (acc) 
+\sheep: 0.7016 (miou) , 0.7402 (acc) 
+\sofa: 0.3695 (miou) , 0.4550 (acc) 
+\train: 0.7483 (miou) , 0.8522 (acc) 
+\tvmonitor: 0.5486 (miou) , 0.6684 (acc) 
+
+curr_val_score : 0.5334
+... save best ckpt :  0.5334048704100749
+Model saved as checkpoints/deeplabv3_resnet101_voc_15-5_step_1_overlap.pth
+[15-5 / step 1] Epoch 3, Itrs 250/445, Loss=0.779388, CL_loss=0.000000, KD_loss_ret=0.070010, Time=983.99 , LR=0.00475891
+[15-5 / step 1] Epoch 4, Itrs 300/445, Loss=0.763200, CL_loss=0.000000, KD_loss_ret=0.070048, Time=996.92 , LR=0.00364508
+validation...
+
+Overall Acc: 0.821137
+Mean Acc: 0.187990
+FreqW Acc: 0.755085
+Mean IoU: 0.164283
+Class IoU/Acc:
+\background: 0.8098 (miou) , 0.8718 (acc) 
+\aeroplane: 0.0000 (miou) , 0.0000 (acc) 
+\bicycle: 0.0000 (miou) , 0.0000 (acc) 
+\bird: 0.0000 (miou) , 0.0000 (acc) 
+\boat: 0.0000 (miou) , 0.0000 (acc) 
+\bottle: 0.0000 (miou) , 0.0000 (acc) 
+\bus: 0.0000 (miou) , 0.0000 (acc) 
+\car: 0.0000 (miou) , 0.0000 (acc) 
+\cat: 0.0000 (miou) , 0.0000 (acc) 
+\chair: 0.0000 (miou) , 0.0000 (acc) 
+\cow: 0.0000 (miou) , 0.0000 (acc) 
+\diningtable: 0.0000 (miou) , 0.0000 (acc) 
+\dog: 0.0000 (miou) , 0.0000 (acc) 
+\horse: 0.0000 (miou) , 0.0000 (acc) 
+\motorbike: 0.0000 (miou) , 0.0000 (acc) 
+\person: 0.0000 (miou) , 0.0000 (acc) 
+\pottedplant: 0.3394 (miou) , 0.3796 (acc) 
+\sheep: 0.7361 (miou) , 0.7859 (acc) 
+\sofa: 0.2634 (miou) , 0.2897 (acc) 
+\train: 0.7560 (miou) , 0.8535 (acc) 
+\tvmonitor: 0.5452 (miou) , 0.7673 (acc) 
+
+curr_val_score : 0.5280
+[15-5 / step 1] Epoch 4, Itrs 350/445, Loss=0.773727, CL_loss=0.000000, KD_loss_ret=0.070055, Time=965.75 , LR=0.00249131
+[15-5 / step 1] Epoch 5, Itrs 400/445, Loss=0.756745, CL_loss=0.000000, KD_loss_ret=0.070038, Time=1076.10 , LR=0.00127165
+validation...
+
+Overall Acc: 0.825856
+Mean Acc: 0.193001
+FreqW Acc: 0.761763
+Mean IoU: 0.169323
+Class IoU/Acc:
+\background: 0.8131 (miou) , 0.8725 (acc) 
+\aeroplane: 0.0000 (miou) , 0.0000 (acc) 
+\bicycle: 0.0000 (miou) , 0.0000 (acc) 
+\bird: 0.0000 (miou) , 0.0000 (acc) 
+\boat: 0.0000 (miou) , 0.0000 (acc) 
+\bottle: 0.0000 (miou) , 0.0000 (acc) 
+\bus: 0.0000 (miou) , 0.0000 (acc) 
+\car: 0.0000 (miou) , 0.0000 (acc) 
+\cat: 0.0000 (miou) , 0.0000 (acc) 
+\chair: 0.0000 (miou) , 0.0000 (acc) 
+\cow: 0.0000 (miou) , 0.0000 (acc) 
+\diningtable: 0.0000 (miou) , 0.0000 (acc) 
+\dog: 0.0000 (miou) , 0.0000 (acc) 
+\horse: 0.0000 (miou) , 0.0000 (acc) 
+\motorbike: 0.0000 (miou) , 0.0000 (acc) 
+\person: 0.0000 (miou) , 0.0000 (acc) 
+\pottedplant: 0.3704 (miou) , 0.4285 (acc) 
+\sheep: 0.7507 (miou) , 0.8059 (acc) 
+\sofa: 0.3084 (miou) , 0.3464 (acc) 
+\train: 0.7572 (miou) , 0.8490 (acc) 
+\tvmonitor: 0.5560 (miou) , 0.7506 (acc) 
+
+curr_val_score : 0.5485
+... save best ckpt :  0.5485429204600425
+Model saved as checkpoints/deeplabv3_resnet101_voc_15-5_step_1_overlap.pth
+... Training Done
+... Testing Best Model
+
+Overall Acc: 0.907227
+Mean Acc: 0.831600
+FreqW Acc: 0.847238
+Mean IoU: 0.648319
+Class IoU/Acc:
+\background: 0.8981 (miou) , 0.9281 (acc) 
+\aeroplane: 0.7372 (miou) , 0.9595 (acc) 
+\bicycle: 0.3493 (miou) , 0.9000 (acc) 
+\bird: 0.8298 (miou) , 0.9553 (acc) 
+\boat: 0.5318 (miou) , 0.9494 (acc) 
+\bottle: 0.6344 (miou) , 0.9339 (acc) 
+\bus: 0.8920 (miou) , 0.9526 (acc) 
+\car: 0.7897 (miou) , 0.9279 (acc) 
+\cat: 0.8987 (miou) , 0.9673 (acc) 
+\chair: 0.2891 (miou) , 0.4936 (acc) 
+\cow: 0.7110 (miou) , 0.8737 (acc) 
+\diningtable: 0.5846 (miou) , 0.7424 (acc) 
+\dog: 0.8433 (miou) , 0.9529 (acc) 
+\horse: 0.7496 (miou) , 0.9011 (acc) 
+\motorbike: 0.7892 (miou) , 0.9639 (acc) 
+\person: 0.8105 (miou) , 0.8815 (acc) 
+\pottedplant: 0.2918 (miou) , 0.4285 (acc) 
+\sheep: 0.5501 (miou) , 0.8059 (acc) 
+\sofa: 0.2116 (miou) , 0.3464 (acc) 
+\train: 0.6732 (miou) , 0.8490 (acc) 
+\tvmonitor: 0.5497 (miou) , 0.7506 (acc) 
+
+...from 0 to 15 : best/test_before_mIoU : 0.708640
+...from 16 to 20 best/test_after_mIoU : 0.455290
+...from 0 to 15 : best/test_before_acc : 0.892692
+...from 16 to 20 best/test_after_acc : 0.636104

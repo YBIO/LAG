@@ -1,9 +1,4 @@
-"""
- * @Author: HibiscusYB 
- * @Date: 2022-04-11 14:20:07 
- * @Last Modified by:   HibiscusYB
- * @Last Modified time: 2022-04-11 14:20:07 
-"""
+
 
 from tqdm import tqdm
 import network

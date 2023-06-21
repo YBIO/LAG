@@ -10,7 +10,7 @@
 ## Models
 ### Class\&Domain Incre. - ISPRS    
 
- | task | link |fetch code|
+ | task | model |fetch code|
  | :----: | :----: | :----: |
  | 4-1   | [link](https://pan.baidu.com/s/1MpxO9_Vcg0bmv-wUi6omkg) |rsom  |
  | 2-3   | [link](https://pan.baidu.com/s/1QBlBPzomcv8MB3Ao4M8gaA) |5ib6  |

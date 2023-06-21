@@ -1,10 +1,6 @@
 # Learn at a Glance: Toward Interpretable Data-Limited Continual Semantic Segmentation via Semantic-Invariance Modeling
-### 
+ 
 
-Bo Yuan<sup>1,2</sup>, Danpei Zhao<sup>1,2</sup>
-
-<sup>1</sup> <sub>Image Processing Center, BUAA</sub><br />
-<sup>2</sup> <sub>Airvic Lab</sub><br />
 
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))

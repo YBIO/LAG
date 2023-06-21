@@ -8,6 +8,14 @@ Bo Yuan<sup>1,2</sup>, Danpei Zhao<sup>1,2</sup>
 
 
 ## Models
+### Class\&Domain Incre. - ISPRS    
+ | task | model |fetch code|
+ | :----: | :----: | :----: |
+ | 4-1   | [link](https://pan.baidu.com/s/1MpxO9_Vcg0bmv-wUi6omkg) |rsom  |
+ | 2-3   | [link](https://pan.baidu.com/s/1QBlBPzomcv8MB3Ao4M8gaA) |5ib6  |
+ | 2-2-1 | [link](https://pan.baidu.com/s/1tN4_PRNiidZAuSuD4GsOZQ) |1poz  |
+ | 2-1   | [link](https://pan.baidu.com/s/1fSOFsoDghTNHGa82r6ff6Q) |gt7a  |
+ 
 ### Class Incre. - VOC
  | task | model |fetch code|
  | :----: | :----: | :----: |
@@ -24,14 +32,7 @@ Bo Yuan<sup>1,2</sup>, Danpei Zhao<sup>1,2</sup>
  | 50-50    | [link](https://pan.baidu.com/s/1Zpm-7VHQ-2Tziu0AD3EkQw) |1988 |
  | 100-5    | [link](https://pan.baidu.com/s/145p_5BDYWNjm1DnNMDmx6w) |7npt |
  
-### Class\&Domain Incre. - ISPRS    
 
- | task | model |fetch code|
- | :----: | :----: | :----: |
- | 4-1   | [link](https://pan.baidu.com/s/1MpxO9_Vcg0bmv-wUi6omkg) |rsom  |
- | 2-3   | [link](https://pan.baidu.com/s/1QBlBPzomcv8MB3Ao4M8gaA) |5ib6  |
- | 2-2-1 | [link](https://pan.baidu.com/s/1tN4_PRNiidZAuSuD4GsOZQ) |1poz  |
- | 2-1   | [link](https://pan.baidu.com/s/1fSOFsoDghTNHGa82r6ff6Q) |gt7a  |
 
 ## Inference
 

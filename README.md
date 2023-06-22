@@ -18,12 +18,20 @@ Research purpose only, please contact <yuanbobuaa@buaa.edu.cn> for unzip passwor
  | 2-1   | [link](https://pan.baidu.com/s/1fSOFsoDghTNHGa82r6ff6Q) |gt7a  |
  
 ### Class Incre. - VOC
-
+ | task | model |fetch code|
+ | :----: | :----: | :----: |
+ | 15-5   | [link](https://pan.baidu.com/s/1ABRhmD4SxMFUh1MVxZMS0w) |wc9m |
+ | 15-1   | [link](https://pan.baidu.com/s/1J4Rf75_GO5UjnsYmeTr4Lg) |d9mt |
+ | 5-3    | [link](https://pan.baidu.com/s/13C4-D8WgnPej1DOQiH0baw) |7lf3 |
+ | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) |j6sg |
+ 
 ### Class Incre. - ADE20K
 
 
 
 ## Inference
+1. Prepare the dataset as introduced in `datasets/voc.py`
+2. Run script in the terminal `sh inference.sh`
 
 ## Train
 

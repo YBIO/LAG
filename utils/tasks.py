@@ -252,6 +252,7 @@ tasks_ISPRS = {
         0: [x for x in range(0,4)],
         1: [x for x in range(4,5)]
     },
+<<<<<<< HEAD
     "2-3":{
         0: [x for x in range(0,2)],
         1: [x for x in range(2,5)]
@@ -261,6 +262,8 @@ tasks_ISPRS = {
         1: [x for x in range(2,4)],
         2: [x for x in range(4,5)]
     },
+=======
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     "2-1":{
         0: [x for x in range(0,2)],
         1: [x for x in range(2,3)],

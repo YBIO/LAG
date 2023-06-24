@@ -12,9 +12,18 @@ class _SimpleSegmentationModel(nn.Module):
         self.bn_freeze = bn_freeze
         
     def forward(self, x):
+<<<<<<< HEAD
 
         input_shape = x.shape[-2:]
         features = self.backbone(x)                      # features.keys(): ['low_level_1', 'low_level_2', 'low_level_3', 'out']
+=======
+        print('x:', x.size())
+        print('classifier:', self.classifier)
+        input_shape = x.shape[-2:]
+        features = self.backbone(x)                      # features.keys(): ['low_level_1', 'low_level_2', 'low_level_3', 'out']
+        print('features:', features.keys(),self.classifier(features)[0].keys(), self.classifier(features)[1].size())
+        assert False
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
         ret_features, x = self.classifier(features)      # classifier is the DeepLabHead, x = torch.Size([6, 17, 28, 28]
         x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False) #torch.Size([b/n_gpus, curr_nb_classes, 513, 513])
 

@@ -47,7 +47,11 @@ class proto_computing:
         self.task = opts.task
 
     def protosave(outputs: torch.tensor, ret_features: torch.tensor, outputs_prev: torch.tensor, ret_features_prev: torch.tensor, min_classes=10, use_sigmoid=True, unknown=True):
+<<<<<<< HEAD
         """ 
+=======
+        I""" 
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
         Input:
             outputs: current model output
             ret_features: current model layer-wise features

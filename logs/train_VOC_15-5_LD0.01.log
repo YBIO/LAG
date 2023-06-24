@@ -1,0 +1,50 @@
+nohup: ignoring input
+===================Train Info===========================
+  task : 15-5
+  step : 1
+  Device: cuda
+  opts :  Namespace(KD_loss_type='KD_loss', KD_outlogits=False, amp=True, batch_size=6, bn_freeze=True, ckpt=None, contrastive_learning=False, crop_size=513, crop_val=False, curr_itrs=0, curr_step=1, cutmix=False, cutout=False, data_ratio=0.01, data_root='/home/yb/dataset/VOC/PascalVOC12/VOCdevkit/VOC2012', dataset='voc', freeze=True, gpu_id='2', lamb=1.0, loss_type='bce_loss', lr=0.01, lr_policy='poly', mem_size=0, mixup=False, model='deeplabv3_resnet101', num_classes=[1, 1, 15, 5], output_stride=16, overlap=True, print_interval=10, pseudo=True, pseudo_thresh=0.7, random_seed=1, separable_conv=False, step_size=10000, task='15-5', test_only=False, train_epoch=30, unknown=True, use_KD_class_weight=False, use_KD_layer_weight=True, val_batch_size=4, val_interval=200, w_transfer=True, weight_decay=0.0001)
+==============================================
+... weight transfer
+Model restored from checkpoints/deeplabv3_resnet101_voc_15-5_step_0_overlap.pth
+>>>num_all_file for step-train training: 2145
+>>>num_LD_file for step-train training: 21
+>>>num_file for val: 354
+Dataset: voc, Train set: 21, Val set: 354, Test set: 1449
+... train epoch : 30 , iterations : 90 , val_interval : 100
+Model saved as checkpoints/deeplabv3_resnet101_voc_15-5_step_1_overlap.pth
+[15-5 / step 1] Epoch 17, Itrs 50/90, Loss=0.947201, CL_loss=0.000000, KD_loss_ret=0.083386, Time=596.24 , LR=0.00481987
+... Training Done
+... Testing Best Model
+
+Overall Acc: 0.903482
+Mean Acc: 0.681663
+FreqW Acc: 0.824806
+Mean IoU: 0.568826
+Class IoU/Acc:
+\background: 0.8904 (miou) , 0.9661 (acc) 
+\aeroplane: 0.7832 (miou) , 0.9535 (acc) 
+\bicycle: 0.3916 (miou) , 0.9000 (acc) 
+\bird: 0.8603 (miou) , 0.9519 (acc) 
+\boat: 0.6638 (miou) , 0.8815 (acc) 
+\bottle: 0.7018 (miou) , 0.9365 (acc) 
+\bus: 0.9190 (miou) , 0.9651 (acc) 
+\car: 0.8328 (miou) , 0.9343 (acc) 
+\cat: 0.9126 (miou) , 0.9591 (acc) 
+\chair: 0.3590 (miou) , 0.5337 (acc) 
+\cow: 0.7257 (miou) , 0.9606 (acc) 
+\diningtable: 0.5924 (miou) , 0.6819 (acc) 
+\dog: 0.8694 (miou) , 0.9494 (acc) 
+\horse: 0.8092 (miou) , 0.9102 (acc) 
+\motorbike: 0.8028 (miou) , 0.9360 (acc) 
+\person: 0.8312 (miou) , 0.8953 (acc) 
+\pottedplant: 0.0000 (miou) , 0.0000 (acc) 
+\sheep: 0.0000 (miou) , 0.0000 (acc) 
+\sofa: 0.0000 (miou) , 0.0000 (acc) 
+\train: 0.0000 (miou) , 0.0000 (acc) 
+\tvmonitor: 0.0000 (miou) , 0.0000 (acc) 
+
+...from 0 to 15 : best/test_before_mIoU : 0.746583
+...from 16 to 20 best/test_after_mIoU : 0.000000
+...from 0 to 15 : best/test_before_acc : 0.894683
+...from 16 to 20 best/test_after_acc : 0.000000

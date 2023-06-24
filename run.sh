@@ -3,7 +3,11 @@
 ## VOC
 DATA_ROOT=/home/yb/dataset/VOC/PascalVOC12/VOCdevkit/VOC2012
 DATASET=voc
+<<<<<<< HEAD
 TASK=10-1
+=======
+TASK=15-1
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 EPOCH=30
 BATCH=12
 LOSS=bce_loss
@@ -11,10 +15,17 @@ KD_LOSS=KD_loss
 LR=0.01
 THRESH=0.7
 MEMORY=0
+<<<<<<< HEAD
 CKPT=checkpoints/limitdata/
 DATA_RATIO=0.5
 
 python run.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 2,3 --lr ${LR} \
+=======
+CKPT=checkpoints/
+DATA_RATIO=1.0
+
+python run.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1,0 --lr ${LR} \
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     --batch_size ${BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight\
     --dataset ${DATASET} --task ${TASK} --overlap --lr_policy poly \
     --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze  \

@@ -55,11 +55,17 @@ class ISPRSSegmentation(data.Dataset):
         ISPRS_root = './datasets/data/ISPRS'
         
         if self.image_set == 'train' or self.image_set == 'memory':
+<<<<<<< HEAD
             # split = 'training' # class incre.
             split = 'training_cd' # class&domain incre.
         else:
             # split = 'validation' #class incre.
             split = 'validation_cd' #class&domain incre.
+=======
+            split = 'training'
+        else:
+            split = 'validation'
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
             
         image_dir = os.path.join(self.root, 'images', split)
         mask_dir = os.path.join(self.root, 'annotations', split)
@@ -70,8 +76,12 @@ class ISPRSSegmentation(data.Dataset):
         self.target_cls += [255] # including ignore index (255)
             
         if image_set=='test':
+<<<<<<< HEAD
             # file_names = open(os.path.join(ISPRS_root, 'val.txt'), 'r') #class incre.
             file_names = open(os.path.join(ISPRS_root, 'val_cd.txt'), 'r') #class&domain incre.
+=======
+            file_names = open(os.path.join(ISPRS_root, 'val.txt'), 'r')
+>>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
             file_names = file_names.read().splitlines()
             
         elif image_set == 'memory':

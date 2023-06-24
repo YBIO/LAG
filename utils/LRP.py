@@ -367,9 +367,6 @@ self,
             output = _run_forward(self.model, inputs, target, additional_forward_args)
         finally:
             self._remove_forward_hooks()
-        # Register pre_hooks that pass the initial activations from before weight
-        # adjustments as inputs to the layers with adjusted weights. This procedure
-        # is important for graph generation in the 2nd forward pass.
         self._register_pre_hooks()
         return output
 
@@ -408,13 +405,7 @@ self,
         self._clear_properties()
 
     def _forward_fn_wrapper(self, *inputs: Tensor) -> Tensor:
-        """
-        Wraps a forward function with addition of zero as a workaround to
-        https://github.com/pytorch/pytorch/issues/35802 discussed in
-        https://github.com/pytorch/captum/issues/143#issuecomment-611750044
 
-        #TODO: Remove when bugs are fixed
-        """
         adjusted_inputs = tuple(
             input + 0 if input is not None else input for input in inputs
         )
@@ -431,11 +422,9 @@ if  __name__ == '__main__':
     import utils
     
 
-    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    device = torch.device('cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    img1 = cv2.imread('../2007_000364.jpg')
-    # img2 = cv2.imread('../2007_000027.jpg')
+    img1 = cv2.imread('../02428.png')
     img2 = cv2.imread('../00143.png')
     img1 = cv2.resize(img1, (500,500))
     img2 = cv2.resize(img2, (500,500))
@@ -443,54 +432,39 @@ if  __name__ == '__main__':
     img_tensor_2 = torch.from_numpy(img2)
     img_tensor_1 = img_tensor_1.to(device, dtype=torch.float32, non_blocking=True)
     img_tensor_2 = img_tensor_2.to(device, dtype=torch.float32, non_blocking=True)
-    print('img_tensor_before:', img_tensor_1.size())
     img_tensor_1 = img_tensor_1.permute(2,0,1)
     img_tensor_2 = img_tensor_2.permute(2,0,1)
-    print('img_tensor_after:', img_tensor_1.size())
     input_tensor = torch.stack((img_tensor_1, img_tensor_2),0) 
-    # img = torch.rand(1, 3, 33, 33)#.type(torch.float32)
 
-    """ model = network.deeplabv3_resnet101()
+    model = network.deeplabv3_resnet101()
     utils.set_bn_momentum(model.backbone, momentum=0.01)
-    checkpoint = '../checkpoints/deeplabv3_resnet101_voc_15-1_step_0_overlap.pth'
+
+
+    checkpoint_path = './checkpoints/deeplabv3_resnet101_ISPRS_2-1_step_5_overlap.pth'
+    checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))["model_state"]
     model.load_state_dict(checkpoint, strict=False)
     model = nn.DataParallel(model) 
-    model = model.to(device) """
-    model = models.resnet101(pretrained=False)
-    # checkpoint_path = '../checkpoints/deeplabv3_resnet101_voc_15-1_step_0_overlap.pth'
-    checkpoint_path = '/home/yb/code/semantic/SSUL/checkpoints/deeplabv3_resnet101_ISPRS_2-2-1_step_0_overlap.pth'
-    checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))["model_state"]
-    print('check_checkpoint:', type(checkpoint))
-    model.load_state_dict(checkpoint, strict=False)
+    model = model.to(device) 
     model = model.eval()
     LRP_model = LRP(model)
-    attribution = LRP_model.attribute(input_tensor, target=2)  #目标类别是5
-    print('attribution:', type(attribution), attribution.size())
+    attribution = LRP_model.attribute(input_tensor, target=5) 
 
 
-    attri_img1, attri_img2 = attribution.split(1, 0) #将一个batch的tensor分割为两张图的tensor
-    attri_img1 = attri_img1.reshape(3,500,500) #去掉第一个维度
-    attri_img2 = attri_img2.reshape(3,500,500) #去掉第一个维度
+    attri_img1, attri_img2 = attribution.split(1, 0)
+    attri_img1 = attri_img1.reshape(3,500,500) 
+    attri_img2 = attri_img2.reshape(3,500,500) 
     print('attri_img1:', attri_img1.size())
     print('attri_img2:', attri_img2.size())
     save_img1 = ((attri_img1.cpu().detach().numpy().transpose(1,2,0)+1) / 2) 
     save_img1 = save_img1 * 255.0
     save_img1 = np.array(save_img1, dtype='uint8')
     save_img1= cv2.cvtColor(save_img1, cv2.COLOR_BGR2RGB)
-    print('save_fig1:', type(save_img1), save_img1.shape)
   
-    # cv2.imwrite('attri_img1.jpg', save_img1)  
-
-    default_cmap = LinearSegmentedColormap.from_list('custom blue',
-                                                 [(0, '#ffffff'),
-                                                  (0.2, '#000000'),
-                                                  (1, '#000000')], N=256)
 
 
-
-    # cmap = plt.get_cmap("turbo_r")
-    # default_cmap = LinearSegmentedColormap.from_list("trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=0.0, b=1.0), 
-    #                                                                                         cmap(np.linspace(0.0, 1.0, 100)),)
+    cmap = plt.get_cmap("turbo_r")
+    default_cmap = LinearSegmentedColormap.from_list("trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=0.0, b=1.0), 
+                                                                                            cmap(np.linspace(0.0, 1.0, 100)),)
 
 
     _ = viz.visualize_image_attr(np.transpose(img_tensor_1.squeeze().cpu().detach().numpy(),(1,2,0)),

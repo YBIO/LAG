@@ -1,8 +1,4 @@
-'''
-@Author: YBIO
-@Date: 2022-04-10 09:32:50 
-@Last Modified time: 2022-11-07 18:33:16 
-'''
+
 
 ## contrastive learning during incremental steps
 ## metric learning + intra-class compactness and inter-class dispersion + Asymmetric Region-wise Contrastive Learning

@@ -1,9 +1,4 @@
-'''
- * @Author: YuanBo 
- * @Date: 2023-03-14 09:34:16 
- * @Last Modified by:   YuanBo 
- * @Last Modified time: 2023-03-14 09:34:16 
- '''
+
 #!/usr/bin/python3
 # -*- encoding: utf-8 -*-
 

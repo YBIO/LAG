@@ -1,9 +1,4 @@
-'''
- * @Author: YuanBo 
- * @Date: 2022-11-07 18:33:16 
- * @Last Modified by:   YuanBo 
- * @Last Modified time: 2022-11-07 18:33:16 
- '''
+
 
 import math
 import json

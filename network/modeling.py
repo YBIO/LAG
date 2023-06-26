@@ -12,8 +12,8 @@ from .backbone import ghostnetv2
 # from torchvision.models import mobilenet_v2
 # from torchvision.models import mobilenet_v3
 # from torchvision.models import regnet
-from torchvision.models import vgg
-from torchvision.models import shufflenetv2
+# from torchvision.models import vgg
+# from torchvision.models import shufflenetv2
 
 
 def _segm_resnet(name, backbone_name, num_classes, output_stride, pretrained_backbone, bn_freeze):

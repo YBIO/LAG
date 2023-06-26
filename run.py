@@ -1,9 +1,7 @@
 '''
  * @Author: YBIO 
  * @Date: 2022-11-07 18:33:16 
- * @Last Modified by:   YuanBo 
- * @Last Modified time: 2022-11-07 18:33:16 
- '''
+'''
 import torch
 import torch.nn as nn
 import network
@@ -25,16 +23,16 @@ from utils import ext_transforms as et
 from metrics import StreamSegMetrics
 from tqdm import tqdm
 
-# import functions
+
 from utils.utils import AverageMeter
 from utils.tasks import get_tasks
 from utils import loss
 from utils.memory import memory_sampling_balanced
 from utils.contrastive_learning import class_contrastive_learning
-from fightingcv_attention.attention.DANet import DAModule  # DANet 2019
-from fightingcv_attention.attention.PSA import PSA # EPSANet 2021
-from fightingcv_attention.attention.ECAAttention import ECAAttention # ECANet 2019
-from fightingcv_attention.attention.PolarizedSelfAttention import ParallelPolarizedSelfAttention,SequentialPolarizedSelfAttention # CVPR 2021
+from fightingcv_attention.attention.DANet import DAModule  
+from fightingcv_attention.attention.PSA import PSA 
+from fightingcv_attention.attention.ECAAttention import ECAAttention 
+from fightingcv_attention.attention.PolarizedSelfAttention import ParallelPolarizedSelfAttention,SequentialPolarizedSelfAttention
 
 torch.backends.cudnn.benchmark = True
 
@@ -207,7 +205,6 @@ def validate(opts, model, loader, device, metrics):
             else:
                 outputs = torch.softmax(outputs, dim=1)
                     
-            # remove unknown label
             if opts.unknown:
                 outputs[:, 1] += outputs[:, 0]
                 outputs = outputs[:, 1:]
@@ -226,7 +223,7 @@ def main(opts):
         
     target_cls = get_tasks(opts.dataset, opts.task, opts.curr_step)
     opts.num_classes = [len(get_tasks(opts.dataset, opts.task, step)) for step in range(opts.curr_step+1)]
-    if opts.unknown: # re-labeling: [unknown, background, ...]
+    if opts.unknown: 
         opts.num_classes = [1, 1, opts.num_classes[0]-1] + opts.num_classes[1:]
     fg_idx = 1 if opts.unknown else 0
  
@@ -336,10 +333,10 @@ def main(opts):
     else:
         model_prev = None
     
-    # IL metrics
+
     metrics = StreamSegMetrics(sum(opts.num_classes)-1 if opts.unknown else sum(opts.num_classes), dataset=opts.dataset)
     
-    # optimizer & parameters 
+
     if opts.freeze and opts.curr_step > 0:
         for param in model_prev.parameters():
             param.requires_grad = False
@@ -347,17 +344,17 @@ def main(opts):
         for param in model.parameters():
             param.requires_grad = False
 
-        for param in model.classifier.head[-1].parameters(): # classifier for new class
+        for param in model.classifier.head[-1].parameters():
             param.requires_grad = True
             
         training_params = [{'params': model.classifier.head[-1].parameters(), 'lr': opts.lr}]
             
         if opts.unknown:
-            for param in model.classifier.head[0].parameters(): # unknown
+            for param in model.classifier.head[0].parameters(): 
                 param.requires_grad = True
             training_params.append({'params': model.classifier.head[0].parameters(), 'lr': opts.lr})
             
-            for param in model.classifier.head[1].parameters(): # background
+            for param in model.classifier.head[1].parameters(): 
                 param.requires_grad = True
             training_params.append({'params': model.classifier.head[1].parameters(), 'lr': opts.lr*1e-4})
         
@@ -386,7 +383,7 @@ def main(opts):
         print("Model saved as %s" % path)
     
     utils.mkdir('checkpoints')
-    # Restore
+
     best_score = -1
     cur_itrs = 0
     cur_epochs = 0
@@ -396,7 +393,7 @@ def main(opts):
     else:
         ckpt_str = "checkpoints/%s_%s_%s_step_%d_disjoint.pth"
     
-    if opts.curr_step > 0: # previous step checkpoint
+    if opts.curr_step > 0:
         opts.ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, opts.curr_step-1)
         
     if opts.ckpt is not None and os.path.isfile(opts.ckpt):
@@ -404,7 +401,6 @@ def main(opts):
         model_prev.load_state_dict(checkpoint, strict=True)
         
         if opts.unknown and opts.w_transfer:
-            # weight transfer : from unknonw to new-class
             print("Model weight transfer")
             curr_head_num = len(model.classifier.head) - 1
 
@@ -426,11 +422,11 @@ def main(opts):
 
         model.load_state_dict(checkpoint, strict=False)
         print("Model restored from %s" % opts.ckpt)
-        del checkpoint  # free memory
+        del checkpoint 
     else:
         print("!!! Model missing, start retraining")
 
-    # set parallel computing and GPU mode
+
     model = nn.DataParallel(model) 
     mode = model.to(device)
     mode.train()
@@ -443,7 +439,7 @@ def main(opts):
         if opts.mem_size > 0:
             memory_sampling_balanced(opts, model_prev)
             
-     # Setup dataloader
+
     if not opts.crop_val:
         opts.val_batch_size = 1
     
@@ -466,7 +462,7 @@ def main(opts):
     val_interval = max(100, total_itrs // 100)
     print(f"Train epoch : {opts.train_epoch} , iterations : {total_itrs} , val_interval : {val_interval}")
         
-    #==========   Train Loop   ==========#
+
     if opts.test_only:
         model.eval()
         test_score = validate(opts=opts, model=model, loader=test_loader, 
@@ -491,7 +487,7 @@ def main(opts):
         warmup_iters = int(total_itrs*0.1)
         scheduler = utils.WarmupPolyLR(optimizer, total_itrs, warmup_iters=warmup_iters, power=0.9)
 
-    # Set up criterion loss 
+
     if opts.loss_type == 'focal_loss':
         criterion = utils.FocalLoss(ignore_index=255, size_average=True)
     elif opts.loss_type == 'ce_loss':
@@ -502,7 +498,7 @@ def main(opts):
     else:
         raise NotImplementedError
     
-    # Set up knowledge distillation loss for ret-features
+
     if opts.KD_loss_type == 'KLDiv_loss':
         criterion_KD = torch.nn.KLDivLoss(size_average=True, reduce=True)
     elif opts.KD_loss_type == 'KD_loss':
@@ -514,11 +510,9 @@ def main(opts):
     else:
         raise NotImplementedError
 
-    # Set up prototype matching loss for ret-features
     if opts.prototype_matching:
         criterion_PM = torch.nn.KLDivLoss(size_average=True, reduce=True)
 
-    # Initialize layer-weight
     if opts.use_KD_layer_weight:
         KD_layer_weight = {'l1':0.5,'l2':1.0, 'l3':2.0, 'out':1.0}
     
@@ -544,7 +538,6 @@ def main(opts):
     
     ## initialize prototype
     if opts.prototype_matching:
-        # encode the feature to sample-specific and semantic-invariant 
         SS_prototype_features = [] 
         SI_prototype_features = [] 
 
@@ -556,12 +549,11 @@ def main(opts):
         cur_itrs += 1
         optimizer.zero_grad()
         end_time = time.time()
-        # load data
         try:
-            images, labels, sal_maps, _ = train_iter.next()
+            images, labels, tar_maps, _ = train_iter.next()
         except:
             train_iter = iter(train_loader)
-            images, labels, sal_maps, _ = train_iter.next()
+            images, labels, tar_maps, _ = train_iter.next()
             cur_epochs += 1
             avg_loss.reset()
             avg_time.reset()
@@ -570,54 +562,46 @@ def main(opts):
             
         images = images.to(device, dtype=torch.float32, non_blocking=True)
         labels = labels.to(device, dtype=torch.long, non_blocking=True)
-        sal_maps = sal_maps.to(device, dtype=torch.long, non_blocking=True)
+        tar_maps = tar_maps.to(device, dtype=torch.long, non_blocking=True)
         
-        # second data augmentaion on tensor
         if opts.cutout and random.random()>0.5:
-            cutout_func = et.Cutout(1, 16) # n_holes, square patch size
+            cutout_func = et.Cutout(1, 16)
             for i in range(opts.batch_size):
                 images[i] = cutout_func(images[i])
                 labels[i] = cutout_func(labels[i])
-                sal_maps[i] = cutout_func(sal_maps[i])
+                tar_maps[i] = cutout_func(tar_maps[i])
 
-        # whether to use exemplar memory
         if opts.curr_step > 0 and opts.mem_size > 0:
             try:
-                m_images, m_labels, m_sal_maps, _ = mem_iter.next()
+                m_images, m_labels, m_tar_maps, _ = mem_iter.next()
             except:
                 mem_iter = iter(memory_loader)
-                m_images, m_labels, m_sal_maps, _ = mem_iter.next()
+                m_images, m_labels, m_tar_maps, _ = mem_iter.next()
 
             m_images = m_images.to(device, dtype=torch.float32, non_blocking=True)
             m_labels = m_labels.to(device, dtype=torch.long, non_blocking=True)
-            m_sal_maps = m_sal_maps.to(device, dtype=torch.long, non_blocking=True)
+            m_tar_maps = m_tar_maps.to(device, dtype=torch.long, non_blocking=True)
             
             rand_index = torch.randperm(opts.batch_size)[:opts.batch_size // 2].cuda()
             images[rand_index, ...] = m_images[rand_index, ...]
             labels[rand_index, ...] = m_labels[rand_index, ...]
-            sal_maps[rand_index, ...] = m_sal_maps[rand_index, ...]
+            tar_maps[rand_index, ...] = m_tar_maps[rand_index, ...]
 
         
-        # network forward and optimization
         with torch.cuda.amp.autocast(enabled=opts.amp):
-            ret_features, outputs = model(images) # outputs: torch.Size([12,17,513,513])
-            # feature decoupling
+            ret_features, outputs = model(images)
             if opts.feature_decoupling:
                 psa = SequentialPolarizedSelfAttention(channel=256)
                 psa = psa.to(device)
                 decouple_feat = ret_features['feature_out']
-                decouple_feat  = decouple_feat.type(torch.float16) # turn to halffloat
-                decouple_feat = psa(decouple_feat).to(device) # cpu
+                decouple_feat  = decouple_feat.type(torch.float16) 
+                decouple_feat = psa(decouple_feat).to(device) 
                 
-  
-
-            ## prototype_saving
             if opts.prototype_matching:
                 SS_prototype_features.append(ret_features['feature_l2'])
                 SI_prototype_features.append(ret_features['feature_out'])
         
 
-            ## Knowledge Distillation(if step>0) & Contrastive Learning
             if model_prev is not None and opts.curr_step>0:
                 with torch.no_grad():
                     ret_features_prev, outputs_prev = model_prev(images)
@@ -626,8 +610,8 @@ def main(opts):
                     psa = SequentialPolarizedSelfAttention(channel=256)
                     psa = psa.to(device)
                     decouple_feat_prev = ret_features_prev['feature_out']
-                    decouple_feat_prev=decouple_feat.type(torch.float16) # turn to halffloat
-                    decouple_feat_prev = psa(decouple_feat).to(device) # cpu
+                    decouple_feat_prev=decouple_feat.type(torch.float16) 
+                    decouple_feat_prev = psa(decouple_feat).to(device) 
                     
 
                 #Contrastive learning, it may consume massive time... working on improving it...
@@ -647,8 +631,6 @@ def main(opts):
                     KD_loss_ret_l2 = criterion_KD(ret_features['feature_l2'], ret_features_prev['feature_l2'])
                     KD_loss_ret_l3 = criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])
                     KD_loss_ret_out = criterion_KD(ret_features['feature_out'], ret_features_prev['feature_out'])                    
-                # if opts.KD_outlogits:
-                #     KD_loss_outlogits = criterion_KD(outputs[:,:outputs_prev.size(1),:,:], outputs_prev)
                 if opts.feature_decoupling:
                     DEC_loss = criterion_DEC(ret_features['feature_out'], ret_features_prev['feature_out'])
                     KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + KD_loss_ret_out +DEC_loss
@@ -665,18 +647,14 @@ def main(opts):
                 else:
                     pred_prob = torch.softmax(outputs_prev, 1).detach()
                     
-                pred_scores, pred_labels = torch.max(pred_prob, dim=1)  #pred_scores&pred_labels:[b,1,513,513]
+                pred_scores, pred_labels = torch.max(pred_prob, dim=1)  
 
                 if opts.uncertainty_pseudo:
                     prev_num_classes = pred_prob.shape[1]
-                    # print('prev_num_classes:', prev_num_classes, pred_prob.size(), pred_labels.size())
                     value_scores, indices_scores = pred_prob.topk(2,dim=1, largest=True, sorted=True) 
-                    # print('value_scores, indices_scores:',value_scores.size(), indices_scores.size(), value_scores[1,:,30,30], indices_scores[1,:,30,30])
                     uncertainty_map = torch.zeros_like(value_scores)
                     uncertainty_map = value_scores[:, 0, :, :] - value_scores[:, 1, :, :]
-                    # print('uncertainty map:', uncertainty_map.size(), uncertainty_map[1,30,30])
                     ranking_map = torch.mul((torch.ones_like(uncertainty_map)-uncertainty_map), pred_labels)
-                    # print('ranking_map:', ranking_map.size(), ranking_map[11][511,511], torch.nonzero(ranking_map))
  
                     pseudo_labels = torch.where( (labels <= fg_idx) & (pred_labels > fg_idx) & (pred_scores >= opts.pseudo_thresh) & (ranking_map > 0.5), 
                                             pred_labels, 
@@ -685,27 +663,22 @@ def main(opts):
                     pseudo_labels = torch.where( (labels <= fg_idx) & (pred_labels > fg_idx) & (pred_scores >= opts.pseudo_thresh), 
                                             pred_labels, 
                                             labels)
-                # print('pseudo-labels:', pseudo_labels.size())
-                # assert False
+
 
                 loss = criterion(outputs, pseudo_labels)
             else:
                 loss = criterion(outputs, labels)
 
         
-        ## Contrastive loss backward
         if opts.contrastive_learning:
             CL_loss.requires_grad_(True)
             scaler.scale(CL_loss.to(device)).backward(retain_graph=True)
             avg_CL_loss.update(CL_loss.item())
 
         
-        ## KD loss backward
         if model_prev is not None and opts.curr_step > 0:
             KD_loss_ret.requires_grad_(True)
             scaler.scale(KD_loss_ret).backward(retain_graph=True)  # set retain_graph = True
-            # scaler.step(optimizer)
-            # scaler.update()
             avg_KD_loss_ret.update(KD_loss_ret.item())
 
 
@@ -718,12 +691,10 @@ def main(opts):
         avg_time.update(time.time() - end_time)
         end_time = time.time()
 
-        # loss visualizer
         if vis is not None:
                 vis.vis_scalar('Loss', cur_itrs, np_loss)
 
 
-        # inter-val, present KD loss, Contrastive loss and CE loss
         if (cur_itrs) % 50 == 0:
             print("[%s / step %d] Epoch %d, Itrs %d/%d, Loss=%6f, CL_loss=%6f, KD_loss_ret=%6f, Time=%.2f , LR=%.8f" %
                   (opts.task, opts.curr_step, cur_epochs, cur_itrs, total_itrs, 

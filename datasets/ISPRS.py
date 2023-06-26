@@ -55,17 +55,11 @@ class ISPRSSegmentation(data.Dataset):
         ISPRS_root = './datasets/data/ISPRS'
         
         if self.image_set == 'train' or self.image_set == 'memory':
-<<<<<<< HEAD
             # split = 'training' # class incre.
             split = 'training_cd' # class&domain incre.
         else:
             # split = 'validation' #class incre.
             split = 'validation_cd' #class&domain incre.
-=======
-            split = 'training'
-        else:
-            split = 'validation'
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
             
         image_dir = os.path.join(self.root, 'images', split)
         mask_dir = os.path.join(self.root, 'annotations', split)
@@ -76,12 +70,8 @@ class ISPRSSegmentation(data.Dataset):
         self.target_cls += [255] # including ignore index (255)
             
         if image_set=='test':
-<<<<<<< HEAD
             # file_names = open(os.path.join(ISPRS_root, 'val.txt'), 'r') #class incre.
             file_names = open(os.path.join(ISPRS_root, 'val_cd.txt'), 'r') #class&domain incre.
-=======
-            file_names = open(os.path.join(ISPRS_root, 'val.txt'), 'r')
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
             file_names = file_names.read().splitlines()
             
         elif image_set == 'memory':
@@ -127,15 +117,14 @@ class ISPRSSegmentation(data.Dataset):
         file_name = self.file_names[index]
         
         img = Image.open(self.images[index]).convert('RGB')
-        target = Image.open(self.masks[index])
-        # sal_map is useless 
-        sal_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
+        target = Image.open(self.masks[index]) 
+        tar_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
         
         # re-define target label according to the CIL case
         target = self.gt_label_mapping(target)
         
         if self.transform is not None:
-            img, target, sal_map = self.transform(img, target, sal_map)
+            img, target, tar_map = self.transform(img, target, sal_map)
         
         # add unknown label, background index: 0 -> 1, unknown index: 0
         if self.image_set == 'train' and self.unknown:
@@ -147,7 +136,7 @@ class ISPRSSegmentation(data.Dataset):
             unknown_area = (target == 1)
             target = torch.where(unknown_area, torch.zeros_like(target), target)
 
-        return img, target.long(), sal_map, file_name
+        return img, target.long(), tar_map, file_name
 
 
     def __len__(self):

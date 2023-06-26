@@ -66,7 +66,7 @@ class VOCSegmentation(data.Dataset):
             raise RuntimeError('Dataset not found or corrupted.')
         
         mask_dir = os.path.join(self.root, 'SegmentationClassAug')
-        salmap_dir = os.path.join(self.root, 'saliency_map')
+        tarmap_dir = os.path.join(self.root, 'SegmentationClassAug')
         assert os.path.exists(mask_dir), "SegmentationClassAug not found, please refer to README.md and prepare it manually"
             
         self.target_cls = get_tasks('voc', self.task, cil_step)
@@ -105,7 +105,7 @@ class VOCSegmentation(data.Dataset):
 
         self.images = [os.path.join(image_dir, x + ".jpg") for x in file_names]
         self.masks = [os.path.join(mask_dir, x + ".png") for x in file_names]
-        self.sal_maps = [os.path.join(salmap_dir, x + ".png") for x in file_names]
+        self.tar_maps = [os.path.join(tarmap_dir, x + ".png") for x in file_names]
         self.file_names = file_names
         
         # class re-ordering
@@ -131,18 +131,13 @@ class VOCSegmentation(data.Dataset):
         
         img = Image.open(self.images[index]).convert('RGB')
         target = Image.open(self.masks[index])
-        if self.image_set == 'train': #os.path.exists(self.sal_maps[index]):
-            sal_map = Image.open(self.sal_maps[index])
-        else:
-            # sal_map is useless for the valdation
-            sal_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
+        tar_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
         
         # re-define target label according to the CIL case
         target = self.gt_label_mapping(target)
         
         if self.transform is not None:
-            img, target, sal_map = self.transform(img, target, sal_map)
-            # img, target, _ = self.transform(img, target)
+            img, target, tar_map = self.transform(img, target, tar_map)
         
         # add unknown label, background index: 0 -> 1, unknown index: 0
         if self.image_set == 'train' and self.unknown:
@@ -150,10 +145,10 @@ class VOCSegmentation(data.Dataset):
                                  torch.zeros_like(target) + 255,  # keep 255 (uint8)
                                  target+1) # unknown label
 
-            unknown_area = (target == 1) & (sal_map > 0)
+            unknown_area = (target == 1) & (tar_map > 0)
             target = torch.where(unknown_area, torch.zeros_like(target), target)
             
-        return img, target.long(), sal_map, file_name
+        return img, target.long(), tar_map, file_name
         #return img, target.long(), file_name
 
 

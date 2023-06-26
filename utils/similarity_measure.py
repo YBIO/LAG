@@ -33,7 +33,7 @@ def  cal_similarity(outputs: torch.tensor, ret_features: torch.tensor, outputs_p
         outputs: model output map
         ret_features: features from deep layers
     Return:
-        SI_feats, SS_feats: features ranking by entropy measure
+        SI_feats, SS_feats
      """
 
     if use_sigmoid:

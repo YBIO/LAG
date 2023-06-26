@@ -1,6 +1,5 @@
-# Learn at a Glance: Toward Interpretable Data-Limited Continual Semantic Segmentation via Semantic-Invariance Modeling
+# Learn at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modeling
  
-
 
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))
@@ -30,13 +29,12 @@ Research purpose only, please contact <yuanbobuaa@buaa.edu.cn> for unzip passwor
 
 
 ## Inference
-1. Prepare the dataset as introduced in `datasets/voc.py`
+1. Prepare the dataset as introduced in `datasets/ISPRS.py`
 2. Run script in the terminal `sh inference.sh`
 
-## Train
 
 ## License
-©2023 BoYuan *All Rights Reserved*
+©2023 YBIO *All Rights Reserved*
 
 
 

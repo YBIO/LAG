@@ -5,7 +5,7 @@
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))
 [link](https://pan.baidu.com/s/1fPiQdPgeSPRasCB84Ru6lw) \
 fetch code：o839 \
-Research purpose only, please contact <yuanbobuaa@buaa.edu.cn> for unzip password.
+Research purpose only
 
 ## Models
 ### Class\&Domain Incre. - ISPRS    

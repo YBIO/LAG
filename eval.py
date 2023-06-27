@@ -272,22 +272,11 @@ def validate(opts, model, loader, device, metrics):
                 outputs = torch.sigmoid(outputs)
             else:
                 outputs = torch.softmax(outputs, dim=1)
-<<<<<<< HEAD
-
-=======
-                    
-            # remove unknown label
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
             if opts.unknown:
                 outputs[:, 1] += outputs[:, 0]
                 outputs = outputs[:, 1:]
             
             preds = outputs.detach().max(dim=1)[1].cpu().numpy()
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 
             targets = labels.cpu().numpy()
             metrics.update(targets, preds)
@@ -301,11 +290,7 @@ def main(opts):
     
     target_cls = get_tasks(opts.dataset, opts.task, opts.curr_step)
     opts.num_classes = [len(get_tasks(opts.dataset, opts.task, step)) for step in range(opts.curr_step+1)]
-<<<<<<< HEAD
     if opts.unknown: 
-=======
-    if opts.unknown: # [unknown, background, ...]
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
         opts.num_classes = [1, 1, opts.num_classes[0]-1] + opts.num_classes[1:]
     fg_idx = 1 if opts.unknown else 0
     
@@ -324,18 +309,10 @@ def main(opts):
     print(opts)
     print("==============================================")
 
-<<<<<<< HEAD
-=======
-    # Setup random seed
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     torch.manual_seed(opts.random_seed)
     np.random.seed(opts.random_seed)
     random.seed(opts.random_seed)
     
-<<<<<<< HEAD
-=======
-    # Set up model
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     model_map = {
         'deeplabv3_resnet50': network.deeplabv3_resnet50,
         'deeplabv3plus_resnet50': network.deeplabv3plus_resnet50,
@@ -350,11 +327,6 @@ def main(opts):
         network.convert_to_separable_conv(model.classifier)
     utils.set_bn_momentum(model.backbone, momentum=0.01)
         
-<<<<<<< HEAD
-
-=======
-    # Set up metrics
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     metrics = StreamSegMetrics(sum(opts.num_classes)-1 if opts.unknown else sum(opts.num_classes), dataset=opts.dataset)
 
     if opts.overlap:
@@ -371,10 +343,6 @@ def main(opts):
     
     print(">>>Testing Best Model")
     report_dict = dict()
-<<<<<<< HEAD
-=======
-    # best_ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, 0)
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     best_ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, opts.curr_step)
     print('best_ckpt:', best_ckpt)
     checkpoint = torch.load(best_ckpt, map_location=torch.device('cpu'))
@@ -407,10 +375,6 @@ if __name__ == '__main__':
     opts = get_argparser().parse_args()
         
     total_step = len(get_tasks(opts.dataset, opts.task))
-<<<<<<< HEAD
     opts.curr_step = total_step-1
-=======
-    opts.curr_step = 3
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     main(opts)
 

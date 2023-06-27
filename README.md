@@ -31,7 +31,6 @@ Research purpose only
 ## Run
 1. Prepare the dataset as introduced in `datasets/ISPRS.py`
 2. Inference: Run `python eval.py`
-3. Train: Run `python run.py`
 
 
 

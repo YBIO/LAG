@@ -30,7 +30,7 @@ Research purpose only
 
 ## Inference
 1. Prepare the dataset as introduced in `datasets/ISPRS.py`
-2. Run script in the terminal `sh inference.sh`
+2. Run script in the terminal `python eval`
 
 
 ## License

@@ -4,7 +4,7 @@
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))
 [link](https://pan.baidu.com/s/1fPiQdPgeSPRasCB84Ru6lw) \
-fetch code：o839 \
+fetch code：`o839` | unzip pwd: `mshwkzwdjl`
 Research purpose only
 
 ## Models
@@ -28,9 +28,11 @@ Research purpose only
 
 
 
-## Inference
+## Run
 1. Prepare the dataset as introduced in `datasets/ISPRS.py`
-2. Run script in the terminal `python eval`
+2. Inference: Run `python eval.py`
+3. Train: Run `python run.py`
+
 
 
 ## License

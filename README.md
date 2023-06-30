@@ -1,4 +1,4 @@
-# Learn at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modeling
+# Learning at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modeling
  
 
 ## Dataset

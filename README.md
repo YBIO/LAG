@@ -24,7 +24,6 @@ Research purpose only
  | 5-3    | [link](https://pan.baidu.com/s/13C4-D8WgnPej1DOQiH0baw) |7lf3 |
  | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) |j6sg |
  
-### Class Incre. - ADE20K
 
 
 

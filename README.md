@@ -1,6 +1,6 @@
 <img src="illustration/AIRVIC.png" width="100px">
 
-# Learning at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modeling
+# Learning at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modelling
 
 ## Results
 ### Class Incremental Learning

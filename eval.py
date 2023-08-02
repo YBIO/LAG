@@ -249,7 +249,9 @@ def main(opts):
         'deeplabv3_resnet101': network.deeplabv3_resnet101,
         'deeplabv3plus_resnet101': network.deeplabv3plus_resnet101,
         'deeplabv3_mobilenet': network.deeplabv3_mobilenet,
-        'deeplabv3plus_mobilenet': network.deeplabv3plus_mobilenet
+        'deeplabv3plus_mobilenet': network.deeplabv3plus_mobilenet,
+        'deeplabv3_microsoft_swintransformer_swin_t':network.deeplabv3_microsoft_swintransformer_swin_t,
+        'deeplabv3_hrnetv2_48':network.deeplabv3_hrnetv2_48
     }
 
     model = model_map[opts.model](num_classes=opts.num_classes, output_stride=opts.output_stride, bn_freeze=opts.bn_freeze)

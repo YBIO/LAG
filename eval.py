@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 """
  * @Author: HibiscusYB 
  * @Date: 2022-04-11 14:20:07 
  * @Last Modified by:   HibiscusYB
  * @Last Modified time: 2022-04-11 14:20:07 
 """
-=======
-
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 
 from tqdm import tqdm
 import network
@@ -20,11 +16,7 @@ import numpy as np
 import cv2
 
 from torch.utils import data
-<<<<<<< HEAD
 from datasets import VOCSegmentation, ADESegmentation
-=======
-from datasets import VOCSegmentation, ADESegmentation, ISPRSSegmentation
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 from utils import ext_transforms as et
 from metrics import StreamSegMetrics
 
@@ -34,21 +26,12 @@ import torch.nn as nn
 from utils.utils import AverageMeter
 from utils.tasks import get_tasks
 from utils.memory import memory_sampling_balanced
-<<<<<<< HEAD
 from utils.color_palette import pascal_palette, ade_palette
-=======
-from utils.color_palette import pascal_palette, ade_palette, ISPRS_palette
-from utils.visualize_feature import show_feature_map, draw_features
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 
 from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
 from skimage.io import imread, imsave
-<<<<<<< HEAD
-=======
-from thop import profile
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 
 
 torch.backends.cudnn.benchmark = True
@@ -59,50 +42,14 @@ def get_argparser():
     # Datset Options
     parser.add_argument("--data_root", type=str, default='/data/DB/VOC2012',
                         help="path to Dataset")
-<<<<<<< HEAD
     parser.add_argument("--dataset", type=str, default='voc', choices=['voc', 'ade'], help='Name of dataset')
-=======
-    parser.add_argument("--dataset", type=str, default='voc', choices=['voc', 'ade', 'ISPRS'], help='Name of dataset')
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     parser.add_argument("--num_classes", type=int, default=None, help="num classes (default: None)")
 
     # Deeplab Options
     parser.add_argument("--model", type=str, default='deeplabv3plus_mobilenet',
-<<<<<<< HEAD
                         choices=['deeplabv3_resnet50',  'deeplabv3plus_resnet50',
                                  'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
                                  'deeplabv3_mobilenet', 'deeplabv3plus_mobilenet'], help='model name')
-=======
-                        choices=['deeplabv3_resnet50', 'deeplabv3plus_resnet50',
-                                        'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
-                                        'deeplabv3_mobilenet_v2_bubbliiiing', 'deeplabv3plus_mobilenet_v2_bubbliiiing',
-                                        'deeplabv3_mobilenet_v2', 'deeplabv3plus_mobilenet_v2',
-                                        'deeplabv3_mobilenet_v3_small', 'deeplabv3plus_mobilenet_v3_small',
-                                        'deeplabv3_mobilenet_v3_large', 'deeplabv3plus_mobilenet_v3_large',
-                                        'deeplabv3_mobilenet_v3_large_test', 'deeplabv3plus_mobilenet_v3_large_test',
-                                        'deeplabv3_berniwal_swintransformer_swin_t', 'deeplabv3plus_berniwal_swintransformer_swin_t',
-                                        'deeplabv3_berniwal_swintransformer_swin_s', 'deeplabv3plus_berniwal_swintransformer_swin_s',
-                                        'deeplabv3_berniwal_swintransformer_swin_b', 'deeplabv3plus_berniwal_swintransformer_swin_b',
-                                        'deeplabv3_berniwal_swintransformer_swin_l', 'deeplabv3plus_berniwal_swintransformer_swin_l',
-                                        'deeplabv3_microsoft_swintransformer_swin_t', 'deeplabv3plus_microsoft_swintransformer_swin_t',
-                                        'deeplabv3_microsoft_swintransformer_swin_s', 'deeplabv3plus_microsoft_swintransformer_swin_s',
-                                        'deeplabv3_microsoft_swintransformer_swin_b', 'deeplabv3plus_microsoft_swintransformer_swin_b',
-                                        'deeplabv3_microsoft_swintransformer_swin_l', 'deeplabv3plus_microsoft_swintransformer_swin_l',
-                                        'deeplabv3_hrnetv2_32', 'deeplabv3plus_hrnetv2_32',
-                                        'deeplabv3_hrnetv2_48', 'deeplabv3plus_hrnetv2_48',
-                                        'deeplabv3_xception', 'deeplabv3plus_xception',
-                                        'deeplabv3_regnet_y_400mf', 'deeplabv3plus_regnet_y_400mf',
-                                        'deeplabv3_regnet_y_8gf', 'deeplabv3plus_regnet_y_8gf',
-                                        'deeplabv3_regnet_y_32gf', 'deeplabv3plus_regnet_y_32gf',
-                                        'deeplabv3_vgg11_bn', 'deeplabv3plus_vgg11_bn',
-                                        'deeplabv3_vgg16_bn', 'deeplabv3plus_vgg16_bn',
-                                        'deeplabv3_vgg19_bn', 'deeplabv3plus_vgg19_bn',
-                                        'deeplabv3_shufflenet_v2_x0_5', 'deeplabv3plus_shufflenet_v2_x0_5',
-                                        'deeplabv3_shufflenet_v2_x1_0', 'deeplabv3plus_shufflenet_v2_x1_0',
-                                        'deeplabv3_ghostnet_v2_1_0', 'deeplabv3plus_ghostnet_v2_1_0',
-                                        'deeplabv3_ghostnet_v2_1_3', 'deeplabv3plus_ghostnet_v2_1_3',
-                                        'deeplabv3_ghostnet_v2_1_6', 'deeplabv3plus_ghostnet_v2_1_6'], help='model name')
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     parser.add_argument("--separable_conv", action='store_true', default=False,
                         help="apply separable conv to decoder and aspp")
     parser.add_argument("--output_stride", type=int, default=16, choices=[8, 16])
@@ -170,19 +117,11 @@ def get_argparser():
 
 
 
-<<<<<<< HEAD
 
 def convert_from_color_segmentation(seg):
     color_seg = np.zeros((seg.shape[0], seg.shape[1], 3), dtype=np.uint8)
     palette = pascal_palette() # pascal
     # palette = ade_palette() # ade
-=======
-def convert_from_color_segmentation(seg):
-    color_seg = np.zeros((seg.shape[0], seg.shape[1], 3), dtype=np.uint8)
-    # palette = pascal_palette() # pascal
-    # palette = ade_palette() # ade
-    palette = ISPRS_palette() # ISPRS
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 
     for c, i in palette.items():
         color_seg[ seg == i] = c
@@ -198,10 +137,6 @@ def BGR_to_RGB(cvimg):
     return pilimg
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
 def get_dataset(opts):
     """ Dataset And Augmentation
     """
@@ -234,11 +169,6 @@ def get_dataset(opts):
         dataset = VOCSegmentation
     elif opts.dataset == 'ade':
         dataset = ADESegmentation
-<<<<<<< HEAD
-=======
-    elif opts.dataset == 'ISPRS':
-        dataset = ISPRSSegmentation
->>>>>>> ecae318e6dc743ca5dadc27edce5539b03438991
     else:
         raise NotImplementedError
         

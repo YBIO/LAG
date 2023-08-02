@@ -11,8 +11,6 @@ Continual learning performance on VOC 15-1.
 ISPRS (Postdam(RGB) to Vaihingen(IRRG))
 ![ISPRS](illustration/Fig9.png)
 
-### Data-limited CSS Performance
-![ISPRS](illustration/Table11.png)
 
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))

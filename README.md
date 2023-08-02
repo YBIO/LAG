@@ -1,5 +1,18 @@
+<img src="illustration/AIRVIC.png" width="100px">
 # Learning at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modeling
- 
+
+## Results
+### Class Incremental Learning
+Continual learning performance on VOC 15-1.
+![algorithm](illustration/Fig5.png)
+![visualization](illustration/Fig7.png)
+
+### Class\&Domain Incremental Learning
+ISPRS (Postdam(RGB) to Vaihingen(IRRG))
+![ISPRS](illustration/Fig9.png)
+
+### Data-limited CSS Performance
+![ISPRS](illustration/Table11.png)
 
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))
@@ -30,6 +43,7 @@ Research purpose only
 ## Run
 1. Prepare the dataset as introduced in `datasets/ISPRS.py`
 2. Inference: Run `python eval.py`
+3. Train: Run `python run.py`
 
 
 

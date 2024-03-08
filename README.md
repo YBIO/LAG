@@ -1,17 +1,5 @@
-<img src="illustration/AIRVIC.png" width="100px">
 
-# Learning at a Glance: Toward Interpretable Data-limited Continual Semantic Segmentation via Semantic-Invariance Modelling
-
-## Results
-### Class Incremental Learning
-Continual learning performance on VOC 15-1.
-![algorithm](illustration/Fig5.png)
-![visualization](illustration/Fig7.png)
-
-### Class\&Domain Incremental Learning
-ISPRS (Postdam(RGB) to Vaihingen(IRRG))
-![ISPRS](illustration/Fig9.png)
-
+# Learning at a Glance
 
 ## Dataset
 ### Class\&Domain Incre. - ISPRS (Postdam(RGB) to Vaihingen(IRRG))

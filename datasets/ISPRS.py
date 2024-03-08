@@ -1,7 +1,4 @@
-'''
- * @Author: YBIO 
- * @Date: 2022-11-07 18:33:16 
- '''
+
 import os
 import sys
 import torch.utils.data as data
@@ -59,10 +56,8 @@ class ISPRSSegmentation(data.Dataset):
         ISPRS_root = './datasets/data/ISPRS'
         
         if self.image_set == 'train' or self.image_set == 'memory':
-            # split = 'training' # class incre.
             split = 'training_cd' # class&domain incre.
         else:
-            # split = 'validation' #class incre.
             split = 'validation_cd' #class&domain incre.
             
         image_dir = os.path.join(self.root, 'images', split)
@@ -71,11 +66,10 @@ class ISPRSSegmentation(data.Dataset):
         assert os.path.exists(mask_dir), "annotations not found"
             
         self.target_cls = get_tasks('ISPRS', self.task, cil_step)
-        self.target_cls += [255] # including ignore index (255)
+        self.target_cls += [255] 
             
         if image_set=='test':
-            # file_names = open(os.path.join(ISPRS_root, 'val.txt'), 'r') #class incre.
-            file_names = open(os.path.join(ISPRS_root, 'val_cd.txt'), 'r') #class&domain incre.
+            file_names = open(os.path.join(ISPRS_root, 'val_cd.txt'), 'r')
             file_names = file_names.read().splitlines()
             
         elif image_set == 'memory':
@@ -100,7 +94,6 @@ class ISPRSSegmentation(data.Dataset):
         self.masks = [os.path.join(mask_dir, x + ".png") for x in file_names]
         self.file_names = file_names
         
-        # class re-ordering
         all_steps = get_tasks('ISPRS', self.task)
         all_classes = []
         for i in range(len(all_steps)):
@@ -124,18 +117,15 @@ class ISPRSSegmentation(data.Dataset):
         target = Image.open(self.masks[index]) 
         tar_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
         
-        # re-define target label according to the CIL case
         target = self.gt_label_mapping(target)
         
         if self.transform is not None:
             img, target, tar_map = self.transform(img, target, sal_map)
         
-        # add unknown label, background index: 0 -> 1, unknown index: 0
         if self.image_set == 'train' and self.unknown:
-            
             target = torch.where(target == 255, 
-                                 torch.zeros_like(target) + 255,  # keep 255 (uint8)
-                                 target+1) # unknown label
+                                 torch.zeros_like(target) + 255,  
+                                 target+1) 
             
             unknown_area = (target == 1)
             target = torch.where(unknown_area, torch.zeros_like(target), target)

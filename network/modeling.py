@@ -33,7 +33,6 @@ def _segm_resnet(name, backbone_name, num_classes, output_stride, pretrained_bac
     low_level_planes = 256
 
     if name=='deeplabv3plus':
-        # return_layers = {'layer4': 'out', 'layer1': 'low_level'}
         return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHeadV3Plus(inplanes, low_level_planes, num_classes, aspp_dilate)
     elif name=='deeplabv3':
@@ -67,7 +66,6 @@ def _segm_mobilenet(name, backbone_name, num_classes, output_stride, pretrained_
 
     backbone = mobilenetv2.mobilenet_v2(pretrained=pretrained_backbone, output_stride=output_stride)
     
-    # rename layers
     backbone.low_level_features = backbone.features[0:4]
     backbone.high_level_features = backbone.features[4:-1]
     backbone.features = None
@@ -77,11 +75,9 @@ def _segm_mobilenet(name, backbone_name, num_classes, output_stride, pretrained_
     low_level_planes = 24
     
     if name=='deeplabv3plus':
-        # return_layers = {'high_level_features': 'out', 'low_level_features': 'low_level'}
         return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHeadV3Plus(inplanes, low_level_planes, num_classes, aspp_dilate)
     elif name=='deeplabv3':
-        # return_layers = {'high_level_features': 'out'}
         return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHead(inplanes , num_classes, aspp_dilate)
     backbone = IntermediateLayerGetter(backbone, return_layers=return_layers)
@@ -114,11 +110,9 @@ def _segm_berniwal_swintransformer(name, backbone_name, num_classes, output_stri
         low_level_planes = 384
 
     if name=='deeplabv3plus':
-        # return_layers = {'stage4': 'out', 'stage2': 'low_level'}
         return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHeadV3Plus(inplanes, low_level_planes, num_classes, aspp_dilate)
     elif name=='deeplabv3':
-        # return_layers = {'stage4': 'out'}
         return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHead(inplanes , num_classes, aspp_dilate)
     backbone = IntermediateLayerGetter(backbone, return_layers=return_layers)
@@ -153,9 +147,7 @@ def _segm_microsoft_swintransformer(name, backbone_name, num_classes, output_str
         return_layers = {'stage4': 'out', 'stage2': 'low_level'}
         classifier = DeepLabHeadV3Plus(inplanes, low_level_planes, num_classes, aspp_dilate)
     elif name=='deeplabv3':
-        # return_layers = {'forward_features': 'out'}
         return_layers = {'forward_features': 'out', 'ret_features': 'low_level'}
-        # return_layers = {'layer4': 'out', 'layer1':'low_level_1', 'layer2':'low_level_2', 'layer3':'low_level_3'}
         classifier = DeepLabHead(inplanes, num_classes, aspp_dilate)
     #backbone = IntermediateLayerGetter(backbone, return_layers=return_layers) # for Microsoft
 

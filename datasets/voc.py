@@ -102,7 +102,6 @@ class VOCSegmentation(data.Dataset):
         self.tar_maps = [os.path.join(tarmap_dir, x + ".png") for x in file_names]
         self.file_names = file_names
         
-        # class re-ordering
         all_steps = get_tasks('voc', self.task)
         all_classes = []
         for i in range(len(all_steps)):
@@ -127,23 +126,21 @@ class VOCSegmentation(data.Dataset):
         target = Image.open(self.masks[index])
         tar_map = Image.fromarray(np.ones(target.size[::-1], dtype=np.uint8))
         
-        # re-define target label according to the CIL case
         target = self.gt_label_mapping(target)
         
         if self.transform is not None:
             img, target, tar_map = self.transform(img, target, tar_map)
         
-        # add unknown label, background index: 0 -> 1, unknown index: 0
         if self.image_set == 'train' and self.unknown:
             target = torch.where(target == 255, 
-                                 torch.zeros_like(target) + 255,  # keep 255 (uint8)
-                                 target+1) # unknown label
+                                 torch.zeros_like(target) + 255,  
+                                 target+1)
 
             unknown_area = (target == 1) & (tar_map > 0)
             target = torch.where(unknown_area, torch.zeros_like(target), target)
             
         return img, target.long(), tar_map, file_name
-        #return img, target.long(), file_name
+
 
 
     def __len__(self):

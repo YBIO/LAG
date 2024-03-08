@@ -16,8 +16,7 @@ import torch.nn as nn
 from tqdm import tqdm
 import pandas as pd
 
-# briercalc: Brier Scores (and decompositions) for multiple classes
-# MSE and Brier are similar metrics for optimization
+
 def brierss(brier_forecasts, brierss_ref = None, printres = True):
 
     brier = brier_forecasts.brier.mean()
@@ -37,7 +36,6 @@ def brierss(brier_forecasts, brierss_ref = None, printres = True):
 def brier_components(probs, groupby, f = 'probwin', o = 'probwin_outcome', outcome_classes = 'party', nbins=10):
     probs = probs.copy()
 
-    # binning
     probs['bin'] = pd.qcut(probs[f], q = nbins)
         
     _0, RES, UNC, _1 = brier_components_binary(probs, f = f, o = o)
@@ -79,7 +77,7 @@ def brier_components_binary(probs, f = 'probwin', o = 'probwin_outcome'):
     return CAL, RES, UNC, BS
 
 
-#%%
+
 dfsen = pd.read_csv(filepath_or_buffer = r'./datasets/us_senate_elections.csv')
 
 # per 538`s graph in https://projects.fivethirtyeight.com/checking-our-work/

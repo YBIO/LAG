@@ -74,11 +74,3 @@ class Visualizer(object):
             self.cur_win[name] = self.vis.text(tbl_str, opts=default_opts)
 
 
-if __name__=='__main__':
-    import numpy as np
-    vis = Visualizer(port=13500, env='main')
-    tbl = {"lr": 214, "momentum": 0.9}
-    vis.vis_table("test_table", tbl)
-    tbl = {"lr": 244444, "momentum": 0.9, "haha": "hoho"}
-    vis.vis_table("test_table", tbl)
-    

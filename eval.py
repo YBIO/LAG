@@ -1,10 +1,3 @@
-"""
- * @Author: HibiscusYB 
- * @Date: 2022-04-11 14:20:07 
- * @Last Modified by:   HibiscusYB
- * @Last Modified time: 2022-04-11 14:20:07 
-"""
-
 from tqdm import tqdm
 import network
 import utils
@@ -14,12 +7,10 @@ import random
 import argparse
 import numpy as np
 import cv2
-
 from torch.utils import data
 from datasets import VOCSegmentation, ADESegmentation
 from utils import ext_transforms as et
 from metrics import StreamSegMetrics
-
 import torch
 import torchvision
 import torch.nn as nn
@@ -27,7 +18,6 @@ from utils.utils import AverageMeter
 from utils.tasks import get_tasks
 from utils.memory import memory_sampling_balanced
 from utils.color_palette import pascal_palette, ade_palette
-
 from PIL import Image
 import matplotlib
 import matplotlib.pyplot as plt
@@ -39,22 +29,45 @@ torch.backends.cudnn.benchmark = True
 def get_argparser():
     parser = argparse.ArgumentParser()
 
-    # Datset Options
     parser.add_argument("--data_root", type=str, default='/data/DB/VOC2012',
                         help="path to Dataset")
     parser.add_argument("--dataset", type=str, default='voc', choices=['voc', 'ade'], help='Name of dataset')
     parser.add_argument("--num_classes", type=int, default=None, help="num classes (default: None)")
 
-    # Deeplab Options
     parser.add_argument("--model", type=str, default='deeplabv3plus_mobilenet',
-                        choices=['deeplabv3_resnet50',  'deeplabv3plus_resnet50',
-                                 'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
-                                 'deeplabv3_mobilenet', 'deeplabv3plus_mobilenet'], help='model name')
+                        choices=['deeplabv3_resnet50', 'deeplabv3plus_resnet50',
+                                        'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
+                                        'deeplabv3_mobilenet_v2_bubbliiiing', 'deeplabv3plus_mobilenet_v2_bubbliiiing',
+                                        'deeplabv3_mobilenet_v2', 'deeplabv3plus_mobilenet_v2',
+                                        'deeplabv3_mobilenet_v3_small', 'deeplabv3plus_mobilenet_v3_small',
+                                        'deeplabv3_mobilenet_v3_large', 'deeplabv3plus_mobilenet_v3_large',
+                                        'deeplabv3_mobilenet_v3_large_test', 'deeplabv3plus_mobilenet_v3_large_test',
+                                        'deeplabv3_berniwal_swintransformer_swin_t', 'deeplabv3plus_berniwal_swintransformer_swin_t',
+                                        'deeplabv3_berniwal_swintransformer_swin_s', 'deeplabv3plus_berniwal_swintransformer_swin_s',
+                                        'deeplabv3_berniwal_swintransformer_swin_b', 'deeplabv3plus_berniwal_swintransformer_swin_b',
+                                        'deeplabv3_berniwal_swintransformer_swin_l', 'deeplabv3plus_berniwal_swintransformer_swin_l',
+                                        'deeplabv3_microsoft_swintransformer_swin_t', 'deeplabv3plus_microsoft_swintransformer_swin_t',
+                                        'deeplabv3_microsoft_swintransformer_swin_s', 'deeplabv3plus_microsoft_swintransformer_swin_s',
+                                        'deeplabv3_microsoft_swintransformer_swin_b', 'deeplabv3plus_microsoft_swintransformer_swin_b',
+                                        'deeplabv3_microsoft_swintransformer_swin_l', 'deeplabv3plus_microsoft_swintransformer_swin_l',
+                                        'deeplabv3_hrnetv2_32', 'deeplabv3plus_hrnetv2_32',
+                                        'deeplabv3_hrnetv2_48', 'deeplabv3plus_hrnetv2_48',
+                                        'deeplabv3_xception', 'deeplabv3plus_xception',
+                                        'deeplabv3_regnet_y_400mf', 'deeplabv3plus_regnet_y_400mf',
+                                        'deeplabv3_regnet_y_8gf', 'deeplabv3plus_regnet_y_8gf',
+                                        'deeplabv3_regnet_y_32gf', 'deeplabv3plus_regnet_y_32gf',
+                                        'deeplabv3_vgg11_bn', 'deeplabv3plus_vgg11_bn',
+                                        'deeplabv3_vgg16_bn', 'deeplabv3plus_vgg16_bn',
+                                        'deeplabv3_vgg19_bn', 'deeplabv3plus_vgg19_bn',
+                                        'deeplabv3_shufflenet_v2_x0_5', 'deeplabv3plus_shufflenet_v2_x0_5',
+                                        'deeplabv3_shufflenet_v2_x1_0', 'deeplabv3plus_shufflenet_v2_x1_0',
+                                        'deeplabv3_ghostnet_v2_1_0', 'deeplabv3plus_ghostnet_v2_1_0',
+                                        'deeplabv3_ghostnet_v2_1_3', 'deeplabv3plus_ghostnet_v2_1_3',
+                                        'deeplabv3_ghostnet_v2_1_6', 'deeplabv3plus_ghostnet_v2_1_6'], help='model name')
     parser.add_argument("--separable_conv", action='store_true', default=False,
                         help="apply separable conv to decoder and aspp")
     parser.add_argument("--output_stride", type=int, default=16, choices=[8, 16])
 
-    # Train Options
     parser.add_argument("--amp", action='store_true', default=False)
     parser.add_argument("--freeze", action='store_true', default=False)
     
@@ -100,8 +113,7 @@ def get_argparser():
                         help="epoch interval for eval (default: 100)")
     parser.add_argument("--download", action='store_true', default=False,
                         help="download datasets")
-    
-    # CIL options
+
     parser.add_argument("--pseudo", action='store_true', default=False)
     parser.add_argument("--pseudo_thresh", type=float, default=0.7)
     parser.add_argument("--task", type=str, default='15-1')
@@ -117,30 +129,8 @@ def get_argparser():
 
 
 
-
-def convert_from_color_segmentation(seg):
-    color_seg = np.zeros((seg.shape[0], seg.shape[1], 3), dtype=np.uint8)
-    palette = pascal_palette() # pascal
-    # palette = ade_palette() # ade
-
-    for c, i in palette.items():
-        color_seg[ seg == i] = c
-        
-    color_seg = color_seg[..., ::-1]
-
-    return color_seg
-
-def BGR_to_RGB(cvimg):
-    pilimg = cvimg.copy()
-    pilimg[:, :, 0] = cvimg[:, :, 2]
-    pilimg[:, :, 2] = cvimg[:, :, 0]
-    return pilimg
-
-
 def get_dataset(opts):
-    """ Dataset And Augmentation
-    """
-    
+
     train_transform = et.ExtCompose([
         #et.ExtResize(size=opts.crop_size),
         et.ExtRandomScale((0.5, 2.0)),
@@ -169,6 +159,8 @@ def get_dataset(opts):
         dataset = VOCSegmentation
     elif opts.dataset == 'ade':
         dataset = ADESegmentation
+    elif opts.dataset == 'ISPRS':
+        dataset = ISPRSSegmentation
     else:
         raise NotImplementedError
         
@@ -187,7 +179,6 @@ def get_dataset(opts):
 
 
 def validate(opts, model, loader, device, metrics):
-    """Do validation and return specified samples"""
     metrics.reset()
     ret_samples = []
 
@@ -230,14 +221,7 @@ def main(opts):
     ]
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    
-    print("==============================================")
-    print(f"  task : {opts.task}")
-    print(f"  step : {opts.curr_step}")
-    print("  Device: %s" % device)
-    print( "  opts : ")
-    print(opts)
-    print("==============================================")
+
 
     torch.manual_seed(opts.random_seed)
     np.random.seed(opts.random_seed)
@@ -255,16 +239,13 @@ def main(opts):
     }
 
     model = model_map[opts.model](num_classes=opts.num_classes, output_stride=opts.output_stride, bn_freeze=opts.bn_freeze)
-    if opts.separable_conv and 'plus' in opts.model:
-        network.convert_to_separable_conv(model.classifier)
+
     utils.set_bn_momentum(model.backbone, momentum=0.01)
         
     metrics = StreamSegMetrics(sum(opts.num_classes)-1 if opts.unknown else sum(opts.num_classes), dataset=opts.dataset)
 
     if opts.overlap:
         ckpt_str = "checkpoints/%s_%s_%s_step_%d_overlap.pth"
-    else:
-        ckpt_str = "checkpoints/%s_%s_%s_step_%d_disjoint.pth"
     
     model = nn.DataParallel(model)
     mode = model.to(device)
@@ -273,10 +254,9 @@ def main(opts):
     test_loader = data.DataLoader(
         dataset_dict['test'], batch_size=opts.val_batch_size, shuffle=False, num_workers=4, pin_memory=True)
     
-    print(">>>Testing Best Model")
+    print(">>>Testing...")
     report_dict = dict()
     best_ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, opts.curr_step)
-    print('best_ckpt:', best_ckpt)
     checkpoint = torch.load(best_ckpt, map_location=torch.device('cpu'))
     model.module.load_state_dict(checkpoint["model_state"], strict=True)
     model.eval()
@@ -305,7 +285,6 @@ def main(opts):
 if __name__ == '__main__':
             
     opts = get_argparser().parse_args()
-        
     total_step = len(get_tasks(opts.dataset, opts.task))
     opts.curr_step = total_step-1
     main(opts)

@@ -37,7 +37,7 @@ fetch code：`o839` | unzip pwd: `mshwkzwdjl`
 Research purpose only
 
 ## Run
-Most code is inherit from [IDEC](https://github.com/YBIO/IDEC). It is suggested to rerun the train and evaluation code from [IDEC](https://github.com/YBIO/IDEC).
+Most code is inherit from [IDEC](https://github.com/YBIO/IDEC). It is suggested to rerun the training and evaluation code from [IDEC](https://github.com/YBIO/IDEC).
 
 ### Inference
 The following command is an example to inference the model on ISPRS dataset.
@@ -54,11 +54,7 @@ LR=0.01
 THRESH=0.7
 CKPT=checkpoints/
 
-python eval.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1 --lr ${LR} \
-    --batch_size ${BATCH} --val_batch_size ${VAL_BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight\
-    --dataset ${DATASET} --task ${TASK} --overlap --lr_policy step \
-    --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze  \
-    --unknown --w_transfer --amp 
+python eval.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1 --lr ${LR} --batch_size ${BATCH} --val_batch_size ${VAL_BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight --dataset ${DATASET} --task ${TASK} --overlap --lr_policy step --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze --unknown --w_transfer  
 ```
 
 ### Train
@@ -77,12 +73,7 @@ MEMORY=0
 CKPT=checkpoints/
 DATA_RATIO=1.0
 
-python run.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1,0 --lr ${LR} \
-     --batch_size ${BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight\
-     --dataset ${DATASET} --task ${TASK} --overlap --lr_policy poly \
-     --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze  \
-     --unknown --w_transfer --amp --mem_size ${MEMORY} \
-     --feature_decoupling --data_ratio ${DATA_RATIO}
+python run.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1,0 --lr ${LR} --batch_size ${BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight --dataset ${DATASET} --task ${TASK} --overlap --lr_policy poly --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze --unknown --w_transfer --mem_size ${MEMORY} --feature_decoupling --data_ratio ${DATA_RATIO}
 ```
 
 ## Models

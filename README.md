@@ -19,11 +19,14 @@
   pages={1-16}}
 ```
 ## Results
-  ![](https://img.shields.io/badge/class%20incre.-yellow) 
-  ![](https://img.shields.io/badge/domain%20incre.-blue) 
-
+![](https://img.shields.io/badge/class%20incre.-yellow) on VOC.
 ![vis1](illustration/1.png)
+
+![](https://img.shields.io/badge/class%20incre.-yellow) 
+![](https://img.shields.io/badge/domain%20incre.-blue) on ISPRS.
 ![vis2](illustration/2.png)
+
+- Data-limited continual semantic segmentation
 ![data-limited](illustration/3.png)
 
 ## Dataset

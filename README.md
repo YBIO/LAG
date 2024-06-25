@@ -1,4 +1,4 @@
-<img src="illustration/AIRVIC.png" width="200px">
+<img src="illustration/AIRVICLAB.png" width="200px">
 
 # Learning at a Glance 
 **Learning At a Glance: Towards Interpretable Data-Limited Continual Semantic Segmentation Via Semantic-Invariance Modelling - TPAMI 2024**

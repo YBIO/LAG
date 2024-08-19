@@ -36,9 +36,6 @@
 fetch code：`o839` | unzip pwd: `mshwkzwdjl`
 Research purpose only
 
-## Run
-Most code is inherit from [IDEC](https://github.com/YBIO/IDEC). It is suggested to rerun the training and evaluation code from [IDEC](https://github.com/YBIO/IDEC).
-
 ### Inference
 The following command is an example to inference the model on ISPRS dataset.
 ``` 

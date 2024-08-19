@@ -42,38 +42,13 @@ Most code is inherit from [IDEC](https://github.com/YBIO/IDEC). It is suggested 
 ### Inference
 The following command is an example to inference the model on ISPRS dataset.
 ``` 
-DATA_ROOT=path/to/dataset
-DATASET=ISPRS
-TASK=2-1
-EPOCH=30
-BATCH=4
-VAL_BATCH=1
-LOSS=bce_loss
-KD_LOSS=KD_loss
-LR=0.01
-THRESH=0.7
-CKPT=checkpoints/
-
-python eval.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1 --lr ${LR} --batch_size ${BATCH} --val_batch_size ${VAL_BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight --dataset ${DATASET} --task ${TASK} --overlap --lr_policy step --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze --unknown --w_transfer  
+python eval.py --data_root path/to/dataset --model deeplabv3_resnet101 --gpu_id 1 --lr 0.01 --batch_size 4 --val_batch_size 1 --train_epoch 30  --loss_type bce_loss --KD_loss_type KD_loss --use_KD_layer_weight --dataset ISPRS --task 2-1 --overlap --lr_policy step --pseudo  --freeze  --bn_freeze --unknown --w_transfer  
 ```
 
 ### Train
 The following command is an example to train the model on ISPRS dataset.
 ```
-DATA_ROOT=/path/to/dataset
-DATASET=ISPRS
-TASK=2-1
-EPOCH=30
-BATCH=24
-LOSS=bce_loss
-KD_LOSS=KD_loss
-LR=0.01
-THRESH=0.7
-MEMORY=0
-CKPT=checkpoints/
-DATA_RATIO=1.0
-
-python run.py --data_root ${DATA_ROOT} --model deeplabv3_resnet101 --gpu_id 1,0 --lr ${LR} --batch_size ${BATCH} --train_epoch ${EPOCH}  --loss_type ${LOSS} --KD_loss_type ${KD_LOSS} --use_KD_layer_weight --dataset ${DATASET} --task ${TASK} --overlap --lr_policy poly --pseudo --pseudo_thresh ${THRESH} --freeze  --bn_freeze --unknown --w_transfer --mem_size ${MEMORY} --feature_decoupling --data_ratio ${DATA_RATIO}
+python run.py --data_root /path/to/dataset --model deeplabv3_resnet101 --gpu_id 1,0 --lr 0.01 --batch_size 24 --train_epoch 30  --loss_type bce_loss --KD_loss_type KD_loss --use_KD_layer_weight --dataset ISPRS --task 2-1 --overlap --lr_policy poly --pseudo --freeze  --bn_freeze --unknown --w_transfer --feature_decoupling
 ```
 
 ## Models

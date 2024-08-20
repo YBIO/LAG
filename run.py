@@ -67,9 +67,9 @@ def get_argparser():
     parser.add_argument("--batch_size", type=int, default=32, help='')
     parser.add_argument("--val_batch_size", type=int, default=1, help='')
     parser.add_argument("--crop_size", type=int, default=513)   
-    parser.add_argument("--ckpt", default=None, type=str, help="restore from checkpoint")
-    parser.add_argument("--loss_type", type=str, default='bce_loss', choices=['ce_loss', 'focal_loss', 'bce_loss'], help="")
-    parser.add_argument("--KD_loss_type", type=str, default='KLDiv_loss', choices=['KLDiv_loss', 'KD_loss', 'L1_loss', 'L2_loss'])
+    parser.add_argument("--ckpt", default=None, type=str)
+    parser.add_argument("--loss_type", type=str, default='bce_loss')
+    parser.add_argument("--KD_loss_type", type=str, default='KLDiv_loss')
     parser.add_argument("--use_KD_layer_weight", action='store_true', default=False, help='')
     parser.add_argument("--KD_outlogits", action='store_true', default=False, help='')
     parser.add_argument("--use_KD_class_weight", action='store_true', default=False,  help='')     
@@ -90,15 +90,8 @@ def get_argparser():
     parser.add_argument("--w_transfer", action='store_true', help="")
     parser.add_argument("--unknown", action='store_true', help="")
     parser.add_argument("--cont_learn", action='store_true', help="")
-    parser.add_argument("--data_ratio", type=float, default=1.0, help="")
-    parser.add_argument("--prototype_matching", action='store_true', help='')
-    parser.add_argument("--feature_decoupling", action='store_true', help='')
     parser.add_argument("--rho", type=float, default=0.5, help='')
     parser.add_argument("--uncertainty_pseudo", action='store_true', help='')
-    parser.add_argument("--enable_vis", action='store_true', default=False, help="")
-    parser.add_argument("--vis_port", type=str, default='28333',  help='')
-    parser.add_argument("--vis_env", type=str, default='main', help='')
-    parser.add_argument("--vis_num_samples", type=int, default=8, help='')
     return parser
 
 def get_dataset(opts):
@@ -294,10 +287,6 @@ def main(opts):
         class_iou = list(test_score['Class IoU'].values())
         class_acc = list(test_score['Class Acc'].values())
         first_cls = len(get_tasks(opts.dataset, opts.task, 0)) 
-        print(f"===Class 0 to {first_cls-1} : best/test_before_mIoU : %.6f" % np.mean(class_iou[:first_cls]))
-        print(f"===Class {first_cls} to {len(class_iou)-1} best/test_after_mIoU : %.6f" % np.mean(class_iou[first_cls:]))
-        print(f"===Class 0 to {first_cls-1} : best/test_before_acc : %.6f" % np.mean(class_acc[:first_cls]))
-        print(f"===Class {first_cls} to {len(class_iou)-1} best/test_after_acc : %.6f" % np.mean(class_acc[first_cls:]))
         return
     if opts.lr_policy=='poly':
         scheduler = utils.PolyLR(optimizer, total_itrs, power=0.9)
@@ -455,8 +444,6 @@ def main(opts):
         avg_loss.update(loss.item())
         avg_time.update(time.time() - end_time)
         end_time = time.time()
-        if (cur_itrs) % 100 == 0:
-            print("[%s / step %d] Epoch %d,  Loss=%6f" % (opts.task, opts.curr_step, cur_epochs, avg_loss.avg))
         if val_interval > 0 and (cur_itrs) % val_interval == 0:
             model.eval()
             val_score = validate(opts=opts, model=model, loader=val_loader, device=device, metrics=metrics)

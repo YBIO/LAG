@@ -39,7 +39,7 @@ Research purpose only
 ### Inference
 The following command is an example to inference the model on ISPRS dataset.
 ``` 
-python eval.py --data_root path/to/dataset --model deeplabv3_resnet101 --gpu_id 1 --lr 0.01 --batch_size 4 --val_batch_size 1 --train_epoch 30  --loss_type bce_loss --KD_loss_type KD_loss --use_KD_layer_weight --dataset ISPRS --task 2-1 --overlap --lr_policy step --pseudo  --freeze  --bn_freeze --unknown --w_transfer  
+python eval.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
 ```
 
 

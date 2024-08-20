@@ -29,11 +29,9 @@ torch.backends.cudnn.benchmark = True
 def get_argparser():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--data_root", type=str, default='/data/DB/VOC2012',
-                        help="path to Dataset")
-    parser.add_argument("--dataset", type=str, default='voc', choices=['voc', 'ade'], help='Name of dataset')
-    parser.add_argument("--num_classes", type=int, default=None, help="num classes (default: None)")
-
+    parser.add_argument("--data_root", type=str, default='/data/ISPRS')
+    parser.add_argument("--dataset", type=str, default='ISPRS')
+    parser.add_argument("--num_classes", type=int, default=None)
     parser.add_argument("--model", type=str, default='deeplabv3plus_mobilenet',
                         choices=['deeplabv3_resnet50', 'deeplabv3plus_resnet50',
                                         'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
@@ -49,90 +47,45 @@ def get_argparser():
                                         'deeplabv3_microsoft_swintransformer_swin_t', 'deeplabv3plus_microsoft_swintransformer_swin_t',
                                         'deeplabv3_microsoft_swintransformer_swin_s', 'deeplabv3plus_microsoft_swintransformer_swin_s',
                                         'deeplabv3_microsoft_swintransformer_swin_b', 'deeplabv3plus_microsoft_swintransformer_swin_b',
-                                        'deeplabv3_microsoft_swintransformer_swin_l', 'deeplabv3plus_microsoft_swintransformer_swin_l',
-                                        'deeplabv3_hrnetv2_32', 'deeplabv3plus_hrnetv2_32',
-                                        'deeplabv3_hrnetv2_48', 'deeplabv3plus_hrnetv2_48',
-                                        'deeplabv3_xception', 'deeplabv3plus_xception',
-                                        'deeplabv3_regnet_y_400mf', 'deeplabv3plus_regnet_y_400mf',
-                                        'deeplabv3_regnet_y_8gf', 'deeplabv3plus_regnet_y_8gf',
-                                        'deeplabv3_regnet_y_32gf', 'deeplabv3plus_regnet_y_32gf',
-                                        'deeplabv3_vgg11_bn', 'deeplabv3plus_vgg11_bn',
-                                        'deeplabv3_vgg16_bn', 'deeplabv3plus_vgg16_bn',
-                                        'deeplabv3_vgg19_bn', 'deeplabv3plus_vgg19_bn',
-                                        'deeplabv3_shufflenet_v2_x0_5', 'deeplabv3plus_shufflenet_v2_x0_5',
-                                        'deeplabv3_shufflenet_v2_x1_0', 'deeplabv3plus_shufflenet_v2_x1_0',
-                                        'deeplabv3_ghostnet_v2_1_0', 'deeplabv3plus_ghostnet_v2_1_0',
-                                        'deeplabv3_ghostnet_v2_1_3', 'deeplabv3plus_ghostnet_v2_1_3',
-                                        'deeplabv3_ghostnet_v2_1_6', 'deeplabv3plus_ghostnet_v2_1_6'], help='model name')
-    parser.add_argument("--separable_conv", action='store_true', default=False,
-                        help="apply separable conv to decoder and aspp")
+                                        'deeplabv3_microsoft_swintransformer_swin_l', 'deeplabv3plus_microsoft_swintransformer_swin_l')
+    parser.add_argument("--separable_conv", action='store_true', default=False)
     parser.add_argument("--output_stride", type=int, default=16, choices=[8, 16])
-
     parser.add_argument("--amp", action='store_true', default=False)
     parser.add_argument("--freeze", action='store_true', default=False)
-    
     parser.add_argument("--test_only", action='store_true', default=False)
-    parser.add_argument("--total_itrs", type=int, default=30e3,
-                        help="epoch number (default: 30k)")
-    parser.add_argument("--train_epoch", type=int, default=0,
-                        help="epoch number (default: 0")
+    parser.add_argument("--total_itrs", type=int, default=30e3)
+    parser.add_argument("--train_epoch", type=int, default=30)
     parser.add_argument("--curr_itrs", type=int, default=0)
-    parser.add_argument("--lr", type=float, default=0.01,
-                        help="learning rate (default: 0.01)")
-    parser.add_argument("--lr_policy", type=str, default='warm_poly', choices=['poly', 'step', 'warm_poly'],
-                        help="learning rate scheduler policy")
+    parser.add_argument("--lr", type=float, default=0.01)
+    parser.add_argument("--lr_policy", type=str, default='warm_poly')
     parser.add_argument("--step_size", type=int, default=10000)
-    parser.add_argument("--crop_val", action='store_true', default=False,
-                        help='crop validation (default: False)')
-    parser.add_argument("--batch_size", type=int, default=16,
-                        help='batch size (default: 16)')
-    parser.add_argument("--val_batch_size", type=int, default=4,
-                        help='batch size for validation (default: 4)')
+    parser.add_argument("--crop_val", action='store_true', default=False)
+    parser.add_argument("--batch_size", type=int, default=16)
+    parser.add_argument("--val_batch_size", type=int, default=1)
     parser.add_argument("--crop_size", type=int, default=513)
-    
-    parser.add_argument("--ckpt", default=None, type=str,
-                        help="restore from checkpoint")
-
-    parser.add_argument("--loss_type", type=str, default='bce_loss',
-                        choices=['ce_loss', 'focal_loss', 'bce_loss'], help="loss type (default: False)")
-    parser.add_argument("--KD_loss_type", type=str, default='KLDiv_loss',
-                        choices=['KLDiv_loss', 'KD_loss', 'L1_loss', 'L2_loss'], help="KD loss type for ret features")
-    parser.add_argument("--use_KD_layer_weight", action='store_true', default=False,
-                        help='Whether to apply layer weight for ret feature distillation (default: False)')
-    parser.add_argument("--use_KD_class_weight", action='store_true', default=False,
-                        help='Whether to apply class weight for ret feature distillation (default: False)')   
-    parser.add_argument("--gpu_id", type=str, default='0',
-                        help="GPU ID")
-    parser.add_argument("--weight_decay", type=float, default=1e-4,
-                        help='weight decay (default: 1e-4)')
-    parser.add_argument("--random_seed", type=int, default=1,
-                        help="random seed (default: 1)")
-    parser.add_argument("--print_interval", type=int, default=10,
-                        help="print interval of loss (default: 10)")
-    parser.add_argument("--val_interval", type=int, default=100,
-                        help="epoch interval for eval (default: 100)")
-    parser.add_argument("--download", action='store_true', default=False,
-                        help="download datasets")
-
-    parser.add_argument("--pseudo", action='store_true', default=False)
+    parser.add_argument("--ckpt", default=None, type=str)
+    parser.add_argument("--loss_type", type=str, default='bce_loss')
+    parser.add_argument("--KD_loss_type", type=str, default='KLDiv_loss')
+    parser.add_argument("--use_KD_layer_weight", action='store_false', default=True)
+    parser.add_argument("--use_KD_class_weight", action='store_true', default=False)   
+    parser.add_argument("--gpu_id", type=str, default='0')
+    parser.add_argument("--weight_decay", type=float, default=1e-4)
+    parser.add_argument("--random_seed", type=int, default=1)
+    parser.add_argument("--print_interval", type=int, default=10)
+    parser.add_argument("--val_interval", type=int, default=100)
+    parser.add_argument("--pseudo", action='store_false', default=True)
     parser.add_argument("--pseudo_thresh", type=float, default=0.7)
     parser.add_argument("--task", type=str, default='15-1')
     parser.add_argument("--curr_step", type=int, default=0)
-    parser.add_argument("--overlap", action='store_true', default=False)
-    parser.add_argument("--mem_size", type=int, default=0)
-    
-    parser.add_argument("--bn_freeze", action='store_true', default=False)
-    parser.add_argument("--w_transfer", action='store_true', default=False)
-    parser.add_argument("--unknown", action='store_true', default=False)
-    
+    parser.add_argument("--overlap", action='store_false', default=True)
+    parser.add_argument("--bn_freeze", action='store_false', default=True)
+    parser.add_argument("--w_transfer", action='store_false', default=True)
+    parser.add_argument("--unknown", action='store_false', default=True)
     return parser
 
 
-
 def get_dataset(opts):
-
     train_transform = et.ExtCompose([
-        #et.ExtResize(size=opts.crop_size),
         et.ExtRandomScale((0.5, 2.0)),
         et.ExtRandomCrop(size=(opts.crop_size, opts.crop_size), pad_if_needed=True),
         et.ExtRandomHorizontalFlip(),
@@ -155,11 +108,7 @@ def get_dataset(opts):
                             std=[0.229, 0.224, 0.225]),
         ])
         
-    if opts.dataset == 'voc':
-        dataset = VOCSegmentation
-    elif opts.dataset == 'ade':
-        dataset = ADESegmentation
-    elif opts.dataset == 'ISPRS':
+    if opts.dataset == 'ISPRS':
         dataset = ISPRSSegmentation
     else:
         raise NotImplementedError
@@ -254,7 +203,6 @@ def main(opts):
     test_loader = data.DataLoader(
         dataset_dict['test'], batch_size=opts.val_batch_size, shuffle=False, num_workers=4, pin_memory=True)
     
-    print(">>>Testing...")
     report_dict = dict()
     best_ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, opts.curr_step)
     checkpoint = torch.load(best_ckpt, map_location=torch.device('cpu'))
@@ -278,8 +226,6 @@ def main(opts):
 
     print(f">>>from 0 to {first_cls-1} : best/test_before_mIoU : %.6f" % np.mean(class_iou[:first_cls]))
     print(f">>>from {first_cls} to {len(class_iou)-1} best/test_after_mIoU : %.6f" % np.mean(class_iou[first_cls:]))
-    print(f">>>from 0 to {first_cls-1} : best/test_before_acc : %.6f" % np.mean(class_acc[:first_cls]))
-    print(f">>>from {first_cls} to {len(class_iou)-1} best/test_after_acc : %.6f" % np.mean(class_acc[first_cls:]))
 
 
 if __name__ == '__main__':

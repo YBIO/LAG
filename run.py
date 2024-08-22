@@ -90,7 +90,7 @@ def get_argparser():
     parser.add_argument("--w_transfer", action='store_true', help="")
     parser.add_argument("--unknown", action='store_true', help="")
     parser.add_argument("--cont_learn", action='store_true', help="")
-    parser.add_argument("--rho", type=float, default=0.5, help='')
+    parser.add_argument("--rho", type=float, default=1.0, help='')
     parser.add_argument("--uncertainty_pseudo", action='store_true', help='')
     return parser
 
@@ -111,7 +111,6 @@ def get_dataset(opts):
         val_transform = et.ExtCompose([
             et.ExtToTensor(),
             et.ExtNormalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), ])
-
     if opts.dataset == 'ISPRS':
         dataset = ISPRSSegmentation
     else:
@@ -198,8 +197,6 @@ def main(opts):
         'deeplabv3plus_microsoft_swintransformer_swin_l': network.deeplabv3plus_microsoft_swintransformer_swin_l,
     }
     model = model_map[opts.model](num_classes=opts.num_classes, output_stride=opts.output_stride, bn_freeze=bn_freeze)
-    if opts.separable_conv and 'plus' in opts.model:
-        network.convert_to_separable_conv(model.classifier)
     utils.set_bn_momentum(model.backbone, momentum=0.01)
     if opts.curr_step > 0:
         model_prev = model_map[opts.model](num_classes=opts.num_classes[:-1], output_stride=opts.output_stride, bn_freeze=bn_freeze)
@@ -344,10 +341,10 @@ def main(opts):
         optimizer.zero_grad()
         end_time = time.time()
         try:
-            images, labels, sal_maps, _ = train_iter.next()
+            images, labels, _ = train_iter.next()
         except:
             train_iter = iter(train_loader)
-            images, labels, sal_maps, _ = train_iter.next()
+            images, labels, _ = train_iter.next()
             cur_epochs += 1
             avg_loss.reset()
             avg_time.reset()
@@ -389,8 +386,7 @@ def main(opts):
                         sim_list.append(sim)
                         decouple_loss += torch.as_tensor(sim / channel_num)
                 if opts.cont_learn:
-                    CL_loss = class_contrastive_learning(outputs, ret_features['feature_out'], outputs_prev, ret_features_prev['feature_out'], \
-                                                            num_classes=20)
+                    CL_loss = class_contrastive_learning(outputs, ret_features['feature_out'], outputs_prev, ret_features_prev['feature_out'], num_classes=5)
                 lamb = math.pow(opts.lamb, (cur_epochs/opts.train_epoch))
                 if opts.use_KD_layer_weight:
                     KD_loss_ret_l1 = KD_layer_weight['l1'] * lamb * criterion_KD(ret_features['feature_l1'], ret_features_prev['feature_l1'])

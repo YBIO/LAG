@@ -119,33 +119,7 @@ def get_dataset(opts):
     dataset_dict['train'] = dataset(opts=opts, image_set='train', transform=train_transform, cil_step=opts.curr_step)
     dataset_dict['val'] = dataset(opts=opts,image_set='val', transform=val_transform, cil_step=opts.curr_step)
     dataset_dict['test'] = dataset(opts=opts, image_set='test', transform=val_transform, cil_step=opts.curr_step)
-    if opts.curr_step > 0 and opts.mem_size > 0:
-        dataset_dict['memory'] = dataset(opts=opts, image_set='memory', transform=train_transform, cil_step=opts.curr_step, mem_size=opts.mem_size)
     return dataset_dict
-
-def validate(opts, model, loader, device, metrics):
-    metrics.reset()
-    ret_samples = []
-    with torch.no_grad():
-        for i, (images, labels, _, _) in enumerate(loader):    
-            images = images.to(device, dtype=torch.float32, non_blocking=True)
-            labels = labels.to(device, dtype=torch.long, non_blocking=True)          
-            ret_features, outputs = model(images)
-            if opts.loss_type == 'bce_loss':
-                outputs = torch.sigmoid(outputs)
-            elif opts.loss_type == 'focal_loss':
-                outputs = torch.sigmoid(outputs)
-            else:
-                outputs = torch.softmax(outputs, dim=1)
-            if opts.unknown:
-                outputs[:, 1] += outputs[:, 0]
-                outputs = outputs[:, 1:]
-            preds = outputs.detach().max(dim=1)[1].cpu().numpy()
-            targets = labels.cpu().numpy()
-            metrics.update(targets, preds) 
-        score = metrics.get_results()
-    return score
-
 
 def main(opts):
     os.environ['CUDA_VISIBLE_DEVICES'] = opts.gpu_id
@@ -277,14 +251,6 @@ def main(opts):
         memory_loader = data.DataLoader(dataset_dict['memory'], batch_size=opts.batch_size, shuffle=True, num_workers=4, pin_memory=True, drop_last=True)
     total_itrs = opts.train_epoch * len(train_loader)
     val_interval = max(100, total_itrs // 100)
-    if opts.test_only:
-        model.eval()
-        test_score = validate(opts=opts, model=model, loader=test_loader, device=device, metrics=metrics) 
-        print(metrics.to_str(test_score))
-        class_iou = list(test_score['Class IoU'].values())
-        class_acc = list(test_score['Class Acc'].values())
-        first_cls = len(get_tasks(opts.dataset, opts.task, 0)) 
-        return
     if opts.lr_policy=='poly':
         scheduler = utils.PolyLR(optimizer, total_itrs, power=0.9)
     elif opts.lr_policy=='step':
@@ -304,10 +270,6 @@ def main(opts):
         criterion_KD = torch.nn.KLDivLoss(size_average=True, reduce=True)
     elif opts.KD_loss_type == 'KD_loss':
         criterion_KD = utils.loss.KnowledgeDistillationLoss(alpha=2.0)
-    elif opts.KD_loss_type == 'L1_loss':
-        criterion_KD = torch.nn.L1Loss(size_average=True, reduce=True)
-    elif opts.KD_loss_type == 'L2_loss':
-        criterion_KD = torch.nn.BCELoss(size_average=True, reduce=True)
     else:
         raise NotImplementedError
     if opts.prototype_matching:
@@ -392,17 +354,15 @@ def main(opts):
                     KD_loss_ret_l1 = KD_layer_weight['l1'] * lamb * criterion_KD(ret_features['feature_l1'], ret_features_prev['feature_l1'])
                     KD_loss_ret_l2 = KD_layer_weight['l2'] * lamb * criterion_KD(ret_features['feature_l2'], ret_features_prev['feature_l2'])
                     KD_loss_ret_l3 = KD_layer_weight['l3'] * lamb * criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])
-                    KD_loss_ret_out = KD_layer_weight['out'] * lamb * criterion_KD(ret_features['feature_out'], ret_features_prev['feature_out'])
                 elif opts.prototype_matching:
                     KD_loss_PM = criterion_KD(ret_features['feature_out'], ret_features_prev['feature_out']) 
                 else:
                     KD_loss_ret_l1 = criterion_KD(ret_features['feature_l1'], ret_features_prev['feature_l1'])
                     KD_loss_ret_l2 = criterion_KD(ret_features['feature_l2'], ret_features_prev['feature_l2'])
-                    KD_loss_ret_l3 = criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])
-                    KD_loss_ret_out = criterion_KD(ret_features['feature_out'], ret_features_prev['feature_out'])                    
+                    KD_loss_ret_l3 = criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])                   
                 if opts.feature_decoupling:
                     DEC_loss = criterion_DEC(ret_features['feature_out'], ret_features_prev['feature_out'])
-                    KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + KD_loss_ret_out + DEC_loss + decouple_loss
+                    KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + DEC_loss + decouple_loss
                 else:
                     KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + KD_loss_ret_out       
             if opts.pseudo and opts.curr_step > 0:
@@ -440,15 +400,6 @@ def main(opts):
         avg_loss.update(loss.item())
         avg_time.update(time.time() - end_time)
         end_time = time.time()
-        if val_interval > 0 and (cur_itrs) % val_interval == 0:
-            model.eval()
-            val_score = validate(opts=opts, model=model, loader=val_loader, device=device, metrics=metrics)
-            print(metrics.to_str(val_score))
-            model.train()
-            class_iou = list(val_score['Class IoU'].values())
-            val_score = np.mean( class_iou[curr_idx[0]:curr_idx[1]] + [class_iou[0]])
-            curr_score = np.mean( class_iou[curr_idx[0]:curr_idx[1]] )
-            print("val_score : %.4f" % (curr_score))
     if opts.curr_step > 0:
         best_ckpt = ckpt_str % (opts.model, opts.dataset, opts.task, opts.curr_step)
         checkpoint = torch.load(best_ckpt, map_location=torch.device('cpu'))
@@ -457,8 +408,7 @@ def main(opts):
         test_score = validate(opts=opts, model=model, loader=test_loader, 
                               device=device, metrics=metrics)
         print(metrics.to_str(test_score))
-        class_iou = list(test_score['Class IoU'].values())
-        class_acc = list(test_score['Class Acc'].values())
+        class_iou = list(test_score['IoU'].values())
         first_cls = len(get_tasks(opts.dataset, opts.task, 0))
 
 if __name__ == '__main__':

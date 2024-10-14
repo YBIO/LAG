@@ -41,24 +41,29 @@ The following command is an example to inference the model on ISPRS dataset.
 ``` 
 python eval.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
 ```
-
+### Train
+The following command is an example to inference the model on ISPRS dataset.
+``` 
+python run.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
+```
 
 ## Models
 ### Class\&Domain Incre. - ISPRS    
  | task | BaiduYuan \& fetch code |BUAAYun|
  | :----: | :----: | :----: |
- | 4-1   | [link](https://pan.baidu.com/s/1MpxO9_Vcg0bmv-wUi6omkg) - rsom  | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 2-3   | [link](https://pan.baidu.com/s/1QBlBPzomcv8MB3Ao4M8gaA) - 5ib6  | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 2-2-1 | [link](https://pan.baidu.com/s/1tN4_PRNiidZAuSuD4GsOZQ) - 1poz  | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 2-1   | [link](https://pan.baidu.com/s/1fSOFsoDghTNHGa82r6ff6Q) - gt7a  | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
+ | 4-1   | [link](https://pan.baidu.com/s/1MpxO9_Vcg0bmv-wUi6omkg) - rsom  | [link](https://bhpan.buaa.edu.cn/link/AAC3EADFF8ADEF4F7A9F9F3068680A38F4)
+ | 2-3   | [link](https://pan.baidu.com/s/1QBlBPzomcv8MB3Ao4M8gaA) - 5ib6  | [link](https://bhpan.buaa.edu.cn/link/AABC6943D23EF748458D581BD090849CFD)
+ | 2-2-1 | [link](https://pan.baidu.com/s/1tN4_PRNiidZAuSuD4GsOZQ) - 1poz  | [link](https://bhpan.buaa.edu.cn/link/AA489D1B33FFDB486389858AFE6AC2A7C1)
+ | 2-1   | [link](https://pan.baidu.com/s/1fSOFsoDghTNHGa82r6ff6Q) - gt7a  | [link](https://bhpan.buaa.edu.cn/link/AAF83C53E9C6DA46D49E12074179AE26E1)
  
 ### Class Incre. - VOC
  | task | BaiduYuan \& fetch code| BUAAYun
  | :----: | :----: | :----: | 
- | 15-5   | [link](https://pan.baidu.com/s/1ABRhmD4SxMFUh1MVxZMS0w) - wc9m | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 15-1   | [link](https://pan.baidu.com/s/1J4Rf75_GO5UjnsYmeTr4Lg) - d9mt | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
+ | 15-5   | [link](https://pan.baidu.com/s/1ABRhmD4SxMFUh1MVxZMS0w) - wc9m | [link](https://bhpan.buaa.edu.cn/link/AA97289BD493B040F3A5C231475A1E5B7D)
+ | 15-1   | [link](https://pan.baidu.com/s/1J4Rf75_GO5UjnsYmeTr4Lg) - d9mt | [link](https://bhpan.buaa.edu.cn/link/AA71688809168E4F5E931AEF83CB79C7B0)
  | 5-3    | [link](https://pan.baidu.com/s/13C4-D8WgnPej1DOQiH0baw) - 7lf3 | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) - j6sg | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
+ | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) - j6sg | [link](https://bhpan.buaa.edu.cn/link/AA9EF7B281D29C423CBFCB56C0257A7F72
+文件夹名：VOC10-1)
 
 
 

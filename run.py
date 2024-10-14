@@ -311,7 +311,7 @@ def main(opts):
             avg_loss.reset()
             avg_time.reset()
             avg_KD_loss_ret.reset()
-            avg_CL_loss.reset()   
+            avg_CL_loss.reset()
         images = images.to(device, dtype=torch.float32, non_blocking=True)
         labels = labels.to(device, dtype=torch.long, non_blocking=True)
         sal_maps = sal_maps.to(device, dtype=torch.long, non_blocking=True)

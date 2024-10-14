@@ -42,7 +42,7 @@ The following command is an example to inference the model on ISPRS dataset.
 python eval.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
 ```
 ### Train
-The following command is an example to inference the model on ISPRS dataset.
+The following command is an example to train the model on ISPRS dataset.
 ``` 
 python run.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
 ```

@@ -36,16 +36,15 @@
 fetch code：`o839` | unzip pwd: `mshwkzwdjl`
 Research purpose only
 
-### Inference
-The following command is an example to inference the model on ISPRS dataset.
+### Inference & Train
+The following command is an example to inference/train the model on ISPRS dataset.
 ``` 
-python eval.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
+python eval.py --data_root path/to/dataset  --dataset ISPRS --task 2-1 --lr_policy step
 ```
-### Train
-The following command is an example to train the model on ISPRS dataset.
 ``` 
-python run.py --data_root path/to/dataset --model deeplabv3_resnet101  --dataset ISPRS --task 2-1  --lr_policy step
+python run.py --data_root path/to/dataset  --dataset ISPRS --task 2-1  --lr_policy step
 ```
+
 
 ## Models
 ### Class\&Domain Incre. - ISPRS    

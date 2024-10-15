@@ -32,7 +32,7 @@ def get_argparser():
     parser.add_argument("--data_root", type=str, default='/data/ISPRS')
     parser.add_argument("--dataset", type=str, default='ISPRS')
     parser.add_argument("--num_classes", type=int, default=None)
-    parser.add_argument("--model", type=str, default='deeplabv3plus_mobilenet',
+    parser.add_argument("--model", type=str, default='deeplabv3_resnet101',
                         choices=['deeplabv3_resnet50', 'deeplabv3plus_resnet50',
                                         'deeplabv3_resnet101', 'deeplabv3plus_resnet101',
                                         'deeplabv3_mobilenet_v2_bubbliiiing', 'deeplabv3plus_mobilenet_v2_bubbliiiing',

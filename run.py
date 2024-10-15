@@ -81,7 +81,7 @@ def get_argparser():
     parser.add_argument("--val_interval", type=int, default=200,  help="")
     parser.add_argument("--pseudo", action='store_true', help="")
     parser.add_argument("--pseudo_thresh", type=float, default=0.5)
-    parser.add_argument("--task", type=str, default='4-1', help="")
+    parser.add_argument("--task", type=str, default='4-1', help="4-1, 2-2-1, 2-3, 2-1")
     parser.add_argument("--curr_step", type=int, default=0)
     parser.add_argument("--overlap", action='store_true', help="")
     parser.add_argument("--mem_size", type=int, default=0, help="")

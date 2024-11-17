@@ -61,8 +61,7 @@ python run.py --data_root path/to/dataset  --dataset ISPRS --task 2-1  --lr_poli
  | 15-5   | [link](https://pan.baidu.com/s/1ABRhmD4SxMFUh1MVxZMS0w) - wc9m | [link](https://bhpan.buaa.edu.cn/link/AA97289BD493B040F3A5C231475A1E5B7D)
  | 15-1   | [link](https://pan.baidu.com/s/1J4Rf75_GO5UjnsYmeTr4Lg) - d9mt | [link](https://bhpan.buaa.edu.cn/link/AA71688809168E4F5E931AEF83CB79C7B0)
  | 5-3    | [link](https://pan.baidu.com/s/13C4-D8WgnPej1DOQiH0baw) - 7lf3 | [link](https://bhpan.buaa.edu.cn/link/AA0273C3FEC2AC4C5B910F919418F04BF8)
- | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) - j6sg | [link](https://bhpan.buaa.edu.cn/link/AA9EF7B281D29C423CBFCB56C0257A7F72
-文件夹名：VOC10-1)
+ | 10-1   | [link](https://pan.baidu.com/s/1A099wPqKAXMi1yynvDteMw) - j6sg | [link](https://bhpan.buaa.edu.cn/link/AA9EF7B281D29C423CBFCB56C0257A7F72)
 
 
 

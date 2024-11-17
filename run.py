@@ -353,18 +353,7 @@ def main(opts):
                 if opts.use_KD_layer_weight:
                     KD_loss_ret_l1 = KD_layer_weight['l1'] * lamb * criterion_KD(ret_features['feature_l1'], ret_features_prev['feature_l1'])
                     KD_loss_ret_l2 = KD_layer_weight['l2'] * lamb * criterion_KD(ret_features['feature_l2'], ret_features_prev['feature_l2'])
-                    KD_loss_ret_l3 = KD_layer_weight['l3'] * lamb * criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])
-                elif opts.prototype_matching:
-                    KD_loss_PM = criterion_KD(ret_features['feature_out'], ret_features_prev['feature_out']) 
-                else:
-                    KD_loss_ret_l1 = criterion_KD(ret_features['feature_l1'], ret_features_prev['feature_l1'])
-                    KD_loss_ret_l2 = criterion_KD(ret_features['feature_l2'], ret_features_prev['feature_l2'])
-                    KD_loss_ret_l3 = criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])                   
-                if opts.feature_decoupling:
-                    DEC_loss = criterion_DEC(ret_features['feature_out'], ret_features_prev['feature_out'])
-                    KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + DEC_loss + decouple_loss
-                else:
-                    KD_loss_ret = KD_loss_ret_l1 + KD_loss_ret_l2 + KD_loss_ret_l3 + KD_loss_ret_out       
+                    KD_loss_ret_l3 = KD_layer_weight['l3'] * lamb * criterion_KD(ret_features['feature_l3'], ret_features_prev['feature_l3'])   
             if opts.pseudo and opts.curr_step > 0:
                 with torch.no_grad():
                     ret_features_prev, outputs_prev = model_prev(images)
@@ -407,9 +396,6 @@ def main(opts):
         model.eval()
         test_score = validate(opts=opts, model=model, loader=test_loader, 
                               device=device, metrics=metrics)
-        print(metrics.to_str(test_score))
-        class_iou = list(test_score['IoU'].values())
-        first_cls = len(get_tasks(opts.dataset, opts.task, 0))
 
 if __name__ == '__main__':
     opts = get_argparser().parse_args()
